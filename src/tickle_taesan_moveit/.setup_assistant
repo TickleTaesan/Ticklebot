@@ -1,0 +1,25 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: tickle_taesan_moveit
+    relative_path: urdf/astra_dual_so_arm.urdf
+  srdf:
+    relative_path: config/astra_dual_so_arm.srdf
+  package_settings:
+    author_name: kowook
+    author_email: kowooknasa137@gmail.com
+    generated_timestamp: 1750407692
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity

@@ -1,0 +1,106 @@
+planning_plugin: ompl_interface/OMPLPlanner
+request_adapters: >-
+  default_planner_request_adapters/AddTimeOptimalParameterization
+  default_planner_request_adapters/FixWorkspaceBounds
+  default_planner_request_adapters/FixStartStateBounds
+  default_planner_request_adapters/FixStartStateCollision
+  default_planner_request_adapters/FixStartStatePathConstraints
+start_state_max_bounds_error: 0.1
+
+right_arm_gripper_group:
+  default_planner_config: RRTConnect
+  planner_configs:
+    - SBL
+    - EST
+    - LBKPIECE
+    - BKPIECE
+    - KPIECE
+    - RRT
+    - RRTConnect
+    - RRTstar
+    - TRRT
+    - PRM
+    - PRMstar
+  projection_evaluator: joints(joint_r2,joint_r3)
+  longest_valid_segment_fraction: 0.01
+
+left_arm_gripper_group:
+  default_planner_config: RRTConnect
+  planner_configs:
+    - SBL
+    - EST
+    - LBKPIECE
+    - BKPIECE
+    - KPIECE
+    - RRT
+    - RRTConnect
+    - RRTstar
+    - TRRT
+    - PRM
+    - PRMstar
+  projection_evaluator: joints(joint_l2,joint_l3)
+  longest_valid_segment_fraction: 0.01
+
+right_arm_group:
+  default_planner_config: RRTConnect
+  planner_configs:
+    - SBL
+    - EST
+    - LBKPIECE
+    - BKPIECE
+    - KPIECE
+    - RRT
+    - RRTConnect
+    - RRTstar
+    - TRRT
+    - PRM
+    - PRMstar
+  projection_evaluator: joints(joint_r2,joint_r3)
+  longest_valid_segment_fraction: 0.01
+
+left_arm_group:
+  default_planner_config: RRTConnect
+  planner_configs:
+    - SBL
+    - EST
+    - LBKPIECE
+    - BKPIECE
+    - KPIECE
+    - RRT
+    - RRTConnect
+    - RRTstar
+    - TRRT
+    - PRM
+    - PRMstar
+  projection_evaluator: joints(joint_l2,joint_l3)
+  longest_valid_segment_fraction: 0.01
+
+right_gripper_group:
+  default_planner_config: RRTConnect
+  planner_configs:
+    - SBL
+    - EST
+    - LBKPIECE
+    - BKPIECE
+    - KPIECE
+    - RRT
+    - RRTConnect
+    - RRTstar
+    - TRRT
+    - PRM
+    - PRMstar
+
+left_gripper_group:
+  default_planner_config: RRTConnect
+  planner_configs:
+    - SBL
+    - EST
+    - LBKPIECE
+    - BKPIECE
+    - KPIECE
+    - RRT
+    - RRTConnect
+    - RRTstar
+    - TRRT
+    - PRM
+    - PRMstar 

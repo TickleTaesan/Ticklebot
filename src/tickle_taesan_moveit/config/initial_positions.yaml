@@ -1,0 +1,15 @@
+# Default initial positions for astra_dual_so_arm's ros2_control fake system
+
+initial_positions:
+  joint_l2: 0
+  joint_l3: 0
+  joint_l4: 0
+  joint_l5: 0
+  joint_l6: 0
+  joint_l7l: 0
+  joint_r2: 0
+  joint_r3: 0
+  joint_r4: 0
+  joint_r5: 0
+  joint_r6: 0
+  joint_r7r: 0
