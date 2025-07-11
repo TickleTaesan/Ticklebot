@@ -89,7 +89,7 @@
     <parent link="r_base"/>
     <child link="r_shoulder_link"/>
     <axis xyz="0 -1 0"/>
-    <limit lower="-2.0" upper="2.0" effort="100" velocity="1"/>
+    <limit lower="-1.57" upper="1.57" effort="100" velocity="1"/>
   </joint>
 
   <!-- Right Upper Arm -->
@@ -122,7 +122,7 @@
     <parent link="r_shoulder_link"/>
     <child link="r_upper_arm_link"/>
     <axis xyz="1 0 0"/>
-    <limit lower="-1.75" upper="1.75" effort="100" velocity="1"/>
+    <limit lower="-1.57" upper="1.57" effort="100" velocity="1"/>
   </joint>
 
   <!-- Right Forearm -->
@@ -155,7 +155,7 @@
     <parent link="r_upper_arm_link"/>
     <child link="r_forearm_link"/>
     <axis xyz="1 0 0"/>
-    <limit lower="-1.75" upper="1.57" effort="100" velocity="1"/>
+    <limit lower="-1.57" upper="1.57" effort="100" velocity="1"/>
   </joint>
 
   <!-- Right Wrist -->
@@ -188,7 +188,7 @@
     <parent link="r_forearm_link"/>
     <child link="r_wrist_1_link"/>
     <axis xyz="1 0 0"/>
-    <limit lower="-3.5" upper="0.2" effort="100" velocity="1"/>
+    <limit lower="-1.57" upper="1.57" effort="100" velocity="1"/>
   </joint>
 
   <link name="r_wrist_2_link">
@@ -220,7 +220,7 @@
     <parent link="r_wrist_1_link"/>
     <child link="r_wrist_2_link"/>
     <axis xyz="0 1 0"/>
-    <limit lower="-1.0" upper="4.0" effort="100" velocity="1"/>
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="1"/>
   </joint>
 
   <!-- Right Jaw -->
@@ -253,7 +253,7 @@
     <parent link="r_wrist_2_link"/>
     <child link="r_jaw_link"/>
     <axis xyz="0 0 1"/>
-    <limit lower="-0.22" upper="2.0" effort="100" velocity="1"/>
+    <limit lower="-1.57" upper="1.57" effort="100" velocity="1"/>
   </joint>
 
   <!-- Left SO-ARM 100 -->
@@ -318,7 +318,7 @@
     <parent link="l_base"/>
     <child link="l_shoulder_link"/>
     <axis xyz="0 -1 0"/>
-    <limit lower="-2.0" upper="2.0" effort="100" velocity="1"/>
+    <limit lower="-1.57" upper="1.57" effort="100" velocity="1"/>
   </joint>
 
   <!-- Left Upper Arm -->
@@ -351,7 +351,7 @@
     <parent link="l_shoulder_link"/>
     <child link="l_upper_arm_link"/>
     <axis xyz="1 0 0"/>
-    <limit lower="-1.75" upper="1.75" effort="100" velocity="1"/>
+    <limit lower="-1.57" upper="1.57" effort="100" velocity="1"/>
   </joint>
 
   <!-- Left Forearm -->
@@ -384,7 +384,7 @@
     <parent link="l_upper_arm_link"/>
     <child link="l_forearm_link"/>
     <axis xyz="1 0 0"/>
-    <limit lower="-1.75" upper="1.57" effort="100" velocity="1"/>
+    <limit lower="-1.57" upper="1.57" effort="100" velocity="1"/>
   </joint>
 
   <!-- Left Wrist -->
@@ -417,7 +417,7 @@
     <parent link="l_forearm_link"/>
     <child link="l_wrist_1_link"/>
     <axis xyz="1 0 0"/>
-    <limit lower="-3.5" upper="0.2" effort="100" velocity="1"/>
+    <limit lower="-1.57" upper="1.57" effort="100" velocity="1"/>
   </joint>
 
   <link name="l_wrist_2_link">
@@ -449,7 +449,7 @@
     <parent link="l_wrist_1_link"/>
     <child link="l_wrist_2_link"/>
     <axis xyz="0 1 0"/>
-    <limit lower="-1.0" upper="4.0" effort="100" velocity="1"/>
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="1"/>
   </joint>
 
   <!-- Left Jaw -->
@@ -482,7 +482,7 @@
     <parent link="l_wrist_2_link"/>
     <child link="l_jaw_link"/>
     <axis xyz="0 0 1"/>
-    <limit lower="-0.22" upper="2.0" effort="100" velocity="1"/>
+    <limit lower="-1.57" upper="1.57" effort="100" velocity="1"/>
   </joint>
 
 </robot> 

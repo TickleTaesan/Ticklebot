@@ -168,8 +168,9 @@ class ArmController:
         with self.write_lock:
             self.ser.write(encoded_data)
 
-    JOINT_MIN = np.array([-math.pi/2, -math.pi/2, -math.pi*0.999, -math.pi/2, -math.pi*0.875, -math.pi/2])
-    JOINT_MAX = np.array([math.pi/2, math.pi/2, math.pi*0.999, math.pi/2, math.pi*0.875, math.pi/2])
+    # 수정된 관절 제한 (joint 2,3,4,5,7: -1.57~1.57, joint 6: -3.14~3.14)
+    JOINT_MIN = np.array([-math.pi/2, -math.pi/2, -math.pi/2, -math.pi/2, -math.pi, -math.pi/2])
+    JOINT_MAX = np.array([math.pi/2, math.pi/2, math.pi/2, math.pi/2, math.pi, math.pi/2])
 
     def set_pos(self, pos):
         ok = True

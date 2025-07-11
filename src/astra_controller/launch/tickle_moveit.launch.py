@@ -36,13 +36,10 @@ def generate_launch_description():
     # ================================================================
     # 하드웨어 모드 (현재 비활성화)
     # ================================================================
-    # ros2_control_node = Node(
-    #     package="controller_manager",
-    #     executable="ros2_control_node",
-    #     parameters=[
-    #         moveit_config.robot_description,
-    #         str(moveit_config.package_path / "config/ros2_controllers.yaml"),
-    #     ],
+    # arm_node를 사용하여 실제 하드웨어 제어
+    # arm_node = Node(
+    #     package="astra_controller",
+    #     executable="arm_node",
     #     output="screen",
     # )
 
@@ -89,8 +86,8 @@ def generate_launch_description():
 
     return LaunchDescription([
         robot_state_publisher,
-        dry_run_node,
-        # ros2_control_node,  # 하드웨어 모드용 (현재 비활성화)
+        dry_run_node,  # 시뮬레이션 모드용 (현재 활성화)
+        #arm_node,        # 하드웨어 모드용 (현재 비활성화)
         TimerAction(period=5.0, actions=[move_group]),
         TimerAction(period=7.0, actions=[rviz]),
         TimerAction(period=10.0, actions=[moveit_pose_bridge_node]),
