@@ -43,27 +43,12 @@ arm_node = Node(
 )
 ```
 
-2. ros2_control_node 활성화:
-```python
-# ros2_control_node 주석 해제
-ros2_control_node = Node(
-    package="controller_manager",
-    executable="ros2_control_node",
-    parameters=[
-        moveit_config.robot_description,
-        str(moveit_config.package_path / "config/ros2_controllers.yaml"),
-    ],
-    output="screen",
-)
-```
-
-3. LaunchDescription 수정:
+2. LaunchDescription 수정:
 ```python
 return LaunchDescription([
     robot_state_publisher,
     # dry_run_node,  # 제거
     arm_node,        # 추가
-    ros2_control_node,  # 주석 해제
     TimerAction(period=5.0, actions=[move_group]),
     TimerAction(period=7.0, actions=[rviz]),
     TimerAction(period=10.0, actions=[moveit_pose_bridge_node]),
@@ -71,7 +56,48 @@ return LaunchDescription([
 ])
 ```
 
-## 2. 하드웨어 설정 확인사항
+## 2. tickle_moveit_relay_node.py 수정
+
+### tickle_moveit_relay_node.py 수정
+파일 위치: `src/astra_controller/astra_controller/tickle_moveit_relay_node.py`
+
+하드웨어 모드로 전환하려면 Controller Manager 서비스 블록을 주석 처리:
+
+```python
+# ================================================================
+# 🔄 모드 전환 블록: Controller Manager 서비스
+# ================================================================
+# 시뮬레이션 모드: 아래 블록 활성화
+# 하드웨어 모드: 아래 블록 전체 주석 처리
+# ================================================================
+
+# def list_controllers_callback(request, response):
+#     """가짜 컨트롤러 목록 반환"""
+#     # ... (전체 함수 주석 처리)
+# 
+# def list_controller_types_callback(request, response):
+#     """사용 가능한 컨트롤러 타입 반환"""
+#     # ... (전체 함수 주석 처리)
+# 
+# # Controller Manager 서비스 생성
+# node.create_service(
+#     controller_manager_msgs.srv.ListControllers,
+#     '/controller_manager/list_controllers',
+#     list_controllers_callback
+# )
+# 
+# node.create_service(
+#     controller_manager_msgs.srv.ListControllerTypes,
+#     '/controller_manager/list_controller_types', 
+#     list_controller_types_callback
+# )
+
+# ================================================================
+# 🔄 모드 전환 블록 끝
+# ================================================================
+```
+
+## 3. 하드웨어 설정 확인사항
 
 1. 통신 포트 설정
    - 로봇 팔 제어기: `/dev/tty_puppet_right` (기본값)
@@ -83,7 +109,7 @@ return LaunchDescription([
    ros2 run astra_controller init_hardware
    ```
 
-## 3. 주의사항
+## 4. 주의사항
 
 1. 하드웨어 전환 전 반드시 다음을 확인:
    - 통신 포트가 정상적으로 연결됨
@@ -95,9 +121,14 @@ return LaunchDescription([
    - 작은 움직임부터 테스트
    - 비상 정지 준비
 
-## 4. 디버깅
+## 5. 디버깅
 
 문제 발생 시 다시 시뮬레이션 모드로 전환하려면:
-1. launch 파일에서 `arm_node` 대신 `dry_run_node` 사용
-2. ros2_control_node 다시 주석 처리
-``` 
+
+1. **tickle_moveit.launch.py**:
+   - `arm_node` 주석 처리
+   - `dry_run_node` 주석 해제
+   - LaunchDescription에서 `arm_node` 제거하고 `dry_run_node` 추가
+
+2. **tickle_moveit_relay_node.py**:
+   - Controller Manager 서비스 블록 주석 해제 

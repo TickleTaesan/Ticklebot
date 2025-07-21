@@ -26,7 +26,7 @@ def main(args=None):
     node.declare_parameter('right_device', '/dev/tty_puppet_right')
     node.declare_parameter('right_joint_names', [ "joint_r2", "joint_r3", "joint_r4", "joint_r5", "joint_r6" ])
     node.declare_parameter('right_gripper_joint_names', [ "joint_r7l", "joint_r7r" ])
-    
+
     # 왼쪽 팔 설정
     left_device = node.get_parameter('left_device').value
     left_joint_names = node.get_parameter('left_joint_names').value
