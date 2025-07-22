@@ -47,19 +47,42 @@ def main(args=None):
     # 오른쪽 팔 컨트롤러
     right_arm_controller = ArmController(right_device)
     
-    # 왼쪽 팔 상태 퍼블리셔
-    left_joint_state_publisher = node.create_publisher(sensor_msgs.msg.JointState, "joint_states", 10)
-    left_gripper_joint_state_publisher = node.create_publisher(sensor_msgs.msg.JointState, "gripper_joint_states", 10)
+    # 통합된 Joint States 퍼블리셔 (dry_run_node와 동일한 방식)
+    joint_state_publisher = node.create_publisher(sensor_msgs.msg.JointState, "joint_states", 10)
+    left_gripper_joint_state_publisher = node.create_publisher(sensor_msgs.msg.JointState, "left/gripper_joint_states", 10)
+    right_gripper_joint_state_publisher = node.create_publisher(sensor_msgs.msg.JointState, "right/gripper_joint_states", 10)
+    
+    # 양쪽 팔 상태 저장용 (초기값)
+    left_arm_state = {
+        'position': [0.0, 0.0, 0.0, 0.0, 0.0],
+        'velocity': [0.0, 0.0, 0.0, 0.0, 0.0],
+        'effort': [0.0, 0.0, 0.0, 0.0, 0.0]
+    }
+    right_arm_state = {
+        'position': [0.0, 0.0, 0.0, 0.0, 0.0],
+        'velocity': [0.0, 0.0, 0.0, 0.0, 0.0],
+        'effort': [0.0, 0.0, 0.0, 0.0, 0.0]
+    }
     
     def left_state_cb(position, velocity, effort, this_time):
+        nonlocal left_arm_state
+        left_arm_state = {
+            'position': [ float(p) for p in position[:5] ],
+            'velocity': [ float(v) for v in velocity[:5] ],
+            'effort': [ float(e) for e in effort[:5] ]
+        }
+        
+        # 통합된 Joint States 메시지 발행 (항상 발행)
         msg = sensor_msgs.msg.JointState()
         msg.header.stamp = node.get_clock().now().to_msg()
-        msg.name = left_joint_names
-        msg.position = [ float(p) for p in position[:5] ]
-        msg.velocity = [ float(v) for v in velocity[:5] ]
-        msg.effort = [ float(e) for e in effort[:5] ]
-        left_joint_state_publisher.publish(msg)
+        msg.header.frame_id = "base_link"
+        msg.name = left_joint_names + right_joint_names
+        msg.position = left_arm_state['position'] + right_arm_state['position']
+        msg.velocity = left_arm_state['velocity'] + right_arm_state['velocity']
+        msg.effort = left_arm_state['effort'] + right_arm_state['effort']
+        joint_state_publisher.publish(msg)
         
+        # 왼쪽 그리퍼 상태 발행
         msg = sensor_msgs.msg.JointState()
         msg.header.stamp = node.get_clock().now().to_msg()
         msg.name = left_gripper_joint_names
@@ -69,19 +92,25 @@ def main(args=None):
         left_gripper_joint_state_publisher.publish(msg)
     left_arm_controller.state_cb = left_state_cb
 
-    # 오른쪽 팔 상태 퍼블리셔
-    right_joint_state_publisher = node.create_publisher(sensor_msgs.msg.JointState, "joint_states", 10)
-    right_gripper_joint_state_publisher = node.create_publisher(sensor_msgs.msg.JointState, "gripper_joint_states", 10)
-    
     def right_state_cb(position, velocity, effort, this_time):
+        nonlocal right_arm_state
+        right_arm_state = {
+            'position': [ float(p) for p in position[:5] ],
+            'velocity': [ float(v) for v in velocity[:5] ],
+            'effort': [ float(e) for e in effort[:5] ]
+        }
+        
+        # 통합된 Joint States 메시지 발행 (항상 발행)
         msg = sensor_msgs.msg.JointState()
         msg.header.stamp = node.get_clock().now().to_msg()
-        msg.name = right_joint_names
-        msg.position = [ float(p) for p in position[:5] ]
-        msg.velocity = [ float(v) for v in velocity[:5] ]
-        msg.effort = [ float(e) for e in effort[:5] ]
-        right_joint_state_publisher.publish(msg)
+        msg.header.frame_id = "base_link"
+        msg.name = left_joint_names + right_joint_names
+        msg.position = left_arm_state['position'] + right_arm_state['position']
+        msg.velocity = left_arm_state['velocity'] + right_arm_state['velocity']
+        msg.effort = left_arm_state['effort'] + right_arm_state['effort']
+        joint_state_publisher.publish(msg)
         
+        # 오른쪽 그리퍼 상태 발행
         msg = sensor_msgs.msg.JointState()
         msg.header.stamp = node.get_clock().now().to_msg()
         msg.name = right_gripper_joint_names
@@ -134,6 +163,23 @@ def main(args=None):
     
     right_last_position_cmd = right_arm_controller.get_pos()[0]
     logger.info(f"using initial right state {right_last_position_cmd}")
+    
+    # 초기 Joint States 발행
+    def publish_initial_joint_states():
+        # 통합된 초기 상태 (dry_run_node 방식)
+        msg = sensor_msgs.msg.JointState()
+        msg.header.stamp = node.get_clock().now().to_msg()
+        msg.header.frame_id = "base_link"
+        msg.name = left_joint_names + right_joint_names
+        msg.position = [0.0] * 10  # 왼쪽 5개 + 오른쪽 5개
+        msg.velocity = [0.0] * 10
+        msg.effort = [0.0] * 10
+        joint_state_publisher.publish(msg)
+        
+        logger.info("통합된 초기 Joint States 발행됨 (dry_run_node 방식)")
+    
+    # 1초 후 초기 상태 발행
+    node.create_timer(1.0, lambda: publish_initial_joint_states())
     
     # Joint Command 구독
     def cb(msg: astra_controller_interfaces.msg.JointCommand):

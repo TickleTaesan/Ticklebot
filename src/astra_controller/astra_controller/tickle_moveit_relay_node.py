@@ -36,78 +36,78 @@ def main(args=None):
     }
 
     # ================================================================
-    # 🔄 모드 전환 블록: Controller Manager 서비스
+    # 모드 전환 블록: Controller Manager 서비스
     # ================================================================
     # 시뮬레이션 모드 (현재 활성화): 아래 블록 활성화
     # 하드웨어 모드: 아래 블록 전체 주석 처리
     # ================================================================
     
-    def list_controllers_callback(request, response):
-        """가짜 컨트롤러 목록 반환"""
-        node.get_logger().info(" Controller Manager: list_controllers service called")
+    # def list_controllers_callback(request, response):
+    #     """가짜 컨트롤러 목록 반환"""
+    #     node.get_logger().info(" Controller Manager: list_controllers service called")
         
-        # 오른팔 컨트롤러
-        right_controller = controller_manager_msgs.srv.ListControllers.Response.ControllerState()
-        right_controller.name = "right_arm_gripper_group_controller"
-        right_controller.state = "active"
-        right_controller.type = "joint_trajectory_controller/JointTrajectoryController"
-        right_controller.claimed_interfaces = [
-            "joint_r2/position", "joint_r3/position", "joint_r4/position", 
-            "joint_r5/position", "joint_r6/position", "joint_r7r/position"
-        ]
+    #     # 오른팔 컨트롤러
+    #     right_controller = controller_manager_msgs.srv.ListControllers.Response.ControllerState()
+    #     right_controller.name = "right_arm_gripper_group_controller"
+    #     right_controller.state = "active"
+    #     right_controller.type = "joint_trajectory_controller/JointTrajectoryController"
+    #     right_controller.claimed_interfaces = [
+    #         "joint_r2/position", "joint_r3/position", "joint_r4/position", 
+    #         "joint_r5/position", "joint_r6/position", "joint_r7r/position"
+    #     ]
         
-        # 왼팔 컨트롤러
-        left_controller = controller_manager_msgs.srv.ListControllers.Response.ControllerState()
-        left_controller.name = "left_arm_gripper_group_controller"  
-        left_controller.state = "active"
-        left_controller.type = "joint_trajectory_controller/JointTrajectoryController"
-        left_controller.claimed_interfaces = [
-            "joint_l2/position", "joint_l3/position", "joint_l4/position",
-            "joint_l5/position", "joint_l6/position", "joint_l7l/position"
-        ]
+    #     # 왼팔 컨트롤러
+    #     left_controller = controller_manager_msgs.srv.ListControllers.Response.ControllerState()
+    #     left_controller.name = "left_arm_gripper_group_controller"  
+    #     left_controller.state = "active"
+    #     left_controller.type = "joint_trajectory_controller/JointTrajectoryController"
+    #     left_controller.claimed_interfaces = [
+    #         "joint_l2/position", "joint_l3/position", "joint_l4/position",
+    #         "joint_l5/position", "joint_l6/position", "joint_l7l/position"
+    #     ]
         
-        response.controller = [right_controller, left_controller]
-        node.get_logger().info(f"🔧 Controller Manager: {len(response.controller)}개 컨트롤러 반환")
-        return response
+    #     response.controller = [right_controller, left_controller]
+    #     node.get_logger().info(f"Controller Manager: {len(response.controller)}개 컨트롤러 반환")
+    #     return response
     
-    def list_controller_types_callback(request, response):
-        """사용 가능한 컨트롤러 타입 반환"""
-        node.get_logger().info("🔧 Controller Manager: list_controller_types 서비스 호출됨!")
+    # def list_controller_types_callback(request, response):
+    #     """사용 가능한 컨트롤러 타입 반환"""
+    #     node.get_logger().info("Controller Manager: list_controller_types 서비스 호출됨!")
         
-        controller_type = controller_manager_msgs.srv.ListControllerTypes.Response.ControllerType()
-        controller_type.name = "joint_trajectory_controller/JointTrajectoryController"
-        controller_type.base_class = "controller_interface::ControllerInterface"
-        response.types = [controller_type]
-        return response
+    #     controller_type = controller_manager_msgs.srv.ListControllerTypes.Response.ControllerType()
+    #     controller_type.name = "joint_trajectory_controller/JointTrajectoryController"
+    #     controller_type.base_class = "controller_interface::ControllerInterface"
+    #     response.types = [controller_type]
+    #     return response
     
-    # Controller Manager 서비스 생성
-    node.create_service(
-        controller_manager_msgs.srv.ListControllers,
-        '/controller_manager/list_controllers',
-        list_controllers_callback
-    )
-    node.get_logger().info("🔧 Controller Manager: /controller_manager/list_controllers 서비스 생성됨")
+    # # Controller Manager 서비스 생성
+    # node.create_service(
+    #     controller_manager_msgs.srv.ListControllers,
+    #     '/controller_manager/list_controllers',
+    #     list_controllers_callback
+    # )
+    # node.get_logger().info("Controller Manager: /controller_manager/list_controllers 서비스 생성됨")
     
-    node.create_service(
-        controller_manager_msgs.srv.ListControllerTypes,
-        '/controller_manager/list_controller_types', 
-        list_controller_types_callback
-    )
-    node.get_logger().info("🔧 Controller Manager: /controller_manager/list_controller_types 서비스 생성됨")
+    # node.create_service(
+    #     controller_manager_msgs.srv.ListControllerTypes,
+    #     '/controller_manager/list_controller_types', 
+    #     list_controller_types_callback
+    # )
+    # node.get_logger().info("Controller Manager: /controller_manager/list_controller_types 서비스 생성됨")
     
     # ================================================================
-    # 🔄 모드 전환 블록 끝
+    # 모드 전환 블록 끝
     # ================================================================
 
     def right_arm_execute_trajectory(goal_handle):
         """오른팔 trajectory 실행"""
-        node.get_logger().info(f"🤖 오른팔 trajectory 수신! {len(goal_handle.request.trajectory.points)} 포인트")
+        node.get_logger().info(f"오른팔 trajectory 수신! {len(goal_handle.request.trajectory.points)} 포인트")
         
         # Trajectory points를 joint commands로 변환
         trajectory = goal_handle.request.trajectory
         joint_names = trajectory.joint_names
         
-        node.get_logger().info(f"🎯 Joint names: {joint_names}")
+        node.get_logger().info(f"Joint names: {joint_names}")
         
         if len(trajectory.points) > 0:
             # 마지막 포인트의 목표 위치 사용
@@ -127,25 +127,25 @@ def main(args=None):
             
             # Joint command 발행
             if len(arm_command.name) > 0:
-                node.get_logger().info(f"📤 오른팔 Joint command 발행: {dict(zip(arm_command.name, arm_command.position_cmd))}")
+                node.get_logger().info(f"오른팔 Joint command 발행: {dict(zip(arm_command.name, arm_command.position_cmd))}")
                 arm_joint_command_publisher.publish(arm_command)
         
         # 즉시 성공으로 응답
         goal_handle.succeed()
         result = control_msgs.action.FollowJointTrajectory.Result()
         result.error_code = control_msgs.action.FollowJointTrajectory.Result.SUCCESSFUL
-        node.get_logger().info("✅ 오른팔 trajectory 실행 완료!")
+        node.get_logger().info("오른팔 trajectory 실행 완료!")
         return result
 
     def left_arm_execute_trajectory(goal_handle):
         """왼팔 trajectory 실행"""
-        node.get_logger().info(f"🤖 왼팔 trajectory 수신! {len(goal_handle.request.trajectory.points)} 포인트")
+        node.get_logger().info(f"왼팔 trajectory 수신! {len(goal_handle.request.trajectory.points)} 포인트")
         
         # Trajectory points를 joint commands로 변환
         trajectory = goal_handle.request.trajectory
         joint_names = trajectory.joint_names
         
-        node.get_logger().info(f"🎯 Joint names: {joint_names}")
+        node.get_logger().info(f"Joint names: {joint_names}")
         
         if len(trajectory.points) > 0:
             # 마지막 포인트의 목표 위치 사용
@@ -165,14 +165,14 @@ def main(args=None):
             
             # Joint command 발행
             if len(arm_command.name) > 0:
-                node.get_logger().info(f"📤 왼팔 Joint command 발행: {dict(zip(arm_command.name, arm_command.position_cmd))}")
+                node.get_logger().info(f"왼팔 Joint command 발행: {dict(zip(arm_command.name, arm_command.position_cmd))}")
                 arm_joint_command_publisher.publish(arm_command)
         
         # 즉시 성공으로 응답
         goal_handle.succeed()
         result = control_msgs.action.FollowJointTrajectory.Result()
         result.error_code = control_msgs.action.FollowJointTrajectory.Result.SUCCESSFUL
-        node.get_logger().info("✅ 왼팔 trajectory 실행 완료!")
+        node.get_logger().info("왼팔 trajectory 실행 완료!")
         return result
 
     # 오른팔 Action Server
@@ -182,7 +182,7 @@ def main(args=None):
         '/right_arm_gripper_group_controller/follow_joint_trajectory',
         right_arm_execute_trajectory
     )
-    node.get_logger().info("🤖 오른팔 Action Server 시작됨")
+    node.get_logger().info("오른팔 Action Server 시작됨")
     
     # 왼팔 Action Server
     left_arm_action_server = rclpy.action.ActionServer(
@@ -191,7 +191,7 @@ def main(args=None):
         '/left_arm_gripper_group_controller/follow_joint_trajectory',
         left_arm_execute_trajectory
     )
-    node.get_logger().info("🤖 왼팔 Action Server 시작됨")
+    node.get_logger().info("왼팔 Action Server 시작됨")
     
     node.get_logger().info('Tickle MoveIt Relay Node started')
     node.get_logger().info('- Right arm: /right_arm_gripper_group_controller/follow_joint_trajectory')
