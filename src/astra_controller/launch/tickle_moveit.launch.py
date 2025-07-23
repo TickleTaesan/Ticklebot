@@ -84,6 +84,20 @@ def generate_launch_description():
         output="screen",
     )
 
+    # Add teleop web node for web-based teleoperation
+    teleop_web_node = Node(
+        package="astra_controller",
+        executable="teleop_web_node",
+        output="screen",
+    )
+
+    # Add test goal pose node for testing without teleop
+    # test_goal_pose_node = Node(
+    #     package="astra_controller",
+    #     executable="test_goal_pose_node",
+    #     output="screen",
+    # )
+
     return LaunchDescription([
         robot_state_publisher,
         dry_run_node,  # 시뮬레이션 모드용 (현재 활성화)
@@ -92,4 +106,6 @@ def generate_launch_description():
         TimerAction(period=7.0, actions=[rviz]),
         TimerAction(period=10.0, actions=[moveit_pose_bridge_node]),
         TimerAction(period=10.0, actions=[tickle_moveit_relay_node]),
+        TimerAction(period=12.0, actions=[teleop_web_node]),  # 웹 인터페이스는 마지막에 시작
+        TimerAction(period=15.0, actions=[test_goal_pose_node]),  # 테스트용 goal pose (선택사항)
     ])

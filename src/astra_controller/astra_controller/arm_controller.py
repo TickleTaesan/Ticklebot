@@ -81,7 +81,17 @@ class ArmController:
         # time.sleep(2)
         # exit()
 
+        # 타임아웃을 추가한 초기화 대기
+        timeout = 5.0  # 5초 타임아웃
+        start_time = time.time()
         while self.last_position is None: # wait for init done
+            if time.time() - start_time > timeout:
+                logger.warning(f"Timeout waiting for hardware feedback from {name}. Hardware may not be connected or ESP32 not responding.")
+                # 기본값으로 초기화하여 계속 진행
+                self.last_position = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+                self.last_velocity = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+                self.last_effort = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+                break
             time.sleep(0.1)
     
     # def set_pid(self, p=10.0, i=7.0, d=20.0, i_max=800, i_clip_thres=10.0, i_clip_coef=0.5):

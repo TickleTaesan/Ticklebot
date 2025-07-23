@@ -7,6 +7,7 @@ import sensor_msgs.msg
 import std_msgs.msg
 import astra_controller_interfaces.msg
 import struct
+import numpy as np
 
 from .arm_controller import ArmController
 
@@ -157,11 +158,27 @@ def main(args=None):
         pong_publisher.publish(std_msgs.msg.UInt16MultiArray(data=data))
     right_arm_controller.pong_cb = right_pong_cb
     
-    # 초기 위치 설정
-    left_last_position_cmd = left_arm_controller.get_pos()[0]
+    # 안전한 초기화 함수
+    def get_safe_position(controller, default_pos):
+        try:
+            pos, vel, effort, time = controller.get_pos()
+            if pos is not None:
+                return pos
+            else:
+                logger.warning("Controller position is None, using default")
+                return default_pos
+        except Exception as e:
+            logger.warning(f"Failed to get position: {e}, using default")
+            return default_pos
+    
+    # 기본 위치 설정
+    default_position = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+    
+    # 초기 위치 설정 - 안전한 방식으로 변경
+    left_last_position_cmd = get_safe_position(left_arm_controller, default_position)
     logger.info(f"using initial left state {left_last_position_cmd}")
     
-    right_last_position_cmd = right_arm_controller.get_pos()[0]
+    right_last_position_cmd = get_safe_position(right_arm_controller, default_position)
     logger.info(f"using initial right state {right_last_position_cmd}")
     
     # 초기 Joint States 발행
