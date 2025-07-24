@@ -113,6 +113,108 @@ def load_model(
     return model
 
 
+def load_trained_nomad_model(model_path: str, device: str = 'cuda') -> tuple:
+    """
+    학습된 NoMaD 모델을 로드합니다.
+    
+    Args:
+        model_path: 학습된 모델 체크포인트 경로
+        device: 사용할 디바이스 ('cuda' 또는 'cpu')
+    
+    Returns:
+        tuple: (model, noise_scheduler)
+    """
+    import torch
+    from vint_train.models.nomad.nomad_vint import NoMaD_ViNT
+    from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
+    
+    # 모델 초기화
+    model = NoMaD_ViNT(
+        obs_encoder='efficientnet-b0',
+        encoding_size=256,
+        mha_num_attention_heads=4,
+        mha_num_attention_layers=4,
+        mha_ff_dim_factor=4,
+        down_dims=[64, 128, 256],
+        len_traj_pred=8,
+        learn_angle=False
+    )
+    
+    # 체크포인트 로드
+    checkpoint = torch.load(model_path, map_location=device)
+    
+    # 모델 가중치 로드
+    if 'model_state_dict' in checkpoint:
+        model.load_state_dict(checkpoint['model_state_dict'])
+    else:
+        model.load_state_dict(checkpoint)
+    
+    model.to(device)
+    model.eval()
+    
+    # Noise scheduler 초기화
+    noise_scheduler = DDPMScheduler(
+        num_train_timesteps=1000,
+        beta_start=0.0001,
+        beta_end=0.02,
+        beta_schedule="linear"
+    )
+    
+    return model, noise_scheduler
+
+def nomad_inference_with_trained_model(
+    model, 
+    noise_scheduler, 
+    image: np.ndarray, 
+    goal_image: np.ndarray,
+    num_samples: int = 8,
+    device: str = 'cuda'
+) -> np.ndarray:
+    """
+    학습된 NoMaD 모델로 추론을 수행합니다.
+    
+    Args:
+        model: 학습된 NoMaD 모델
+        noise_scheduler: Noise scheduler
+        image: 현재 이미지
+        goal_image: 목표 이미지
+        num_samples: 샘플링할 액션 수
+        device: 사용할 디바이스
+    
+    Returns:
+        np.ndarray: 예측된 액션들
+    """
+    import torch
+    
+    # 이미지 전처리
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    ])
+    
+    # 이미지를 텐서로 변환
+    obs_tensor = transform(image).unsqueeze(0).to(device)
+    goal_tensor = transform(goal_image).unsqueeze(0).to(device)
+    
+    # 배치 차원 확장 (num_samples만큼)
+    obs_tensor = obs_tensor.repeat(num_samples, 1, 1, 1)
+    goal_tensor = goal_tensor.repeat(num_samples, 1, 1, 1)
+    
+    with torch.no_grad():
+        # 모델 추론
+        predicted_actions = model(
+            obs=obs_tensor,
+            goal=goal_tensor,
+            noise_scheduler=noise_scheduler,
+            num_inference_steps=10
+        )
+    
+    # CPU로 이동하고 numpy로 변환
+    predicted_actions = predicted_actions.cpu().numpy()
+    
+    return predicted_actions
+
+
 def msg_to_pil(msg: Image) -> PILImage.Image:
     """Convert ROS2 Image message to PIL Image"""
     # Use cv_bridge for better compatibility
