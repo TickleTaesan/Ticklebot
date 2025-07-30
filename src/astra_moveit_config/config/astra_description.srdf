@@ -12,7 +12,6 @@
     <group name="right_arm">
         <joint name="virtual_joint"/>
         <joint name="joint_r1"/>
-        <joint name="joint_r1_to_base_right"/>
         <joint name="joint_r2"/>
         <joint name="joint_r3"/>
         <joint name="joint_r4"/>
@@ -26,7 +25,6 @@
     <group name="left_arm">
         <joint name="virtual_joint"/>
         <joint name="joint_l1"/>
-        <joint name="joint_l1_to_base_left"/>
         <joint name="joint_l2"/>
         <joint name="joint_l3"/>
         <joint name="joint_l4"/>
@@ -83,6 +81,11 @@
     <disable_collisions link1="link_r1" link2="link_l3" reason="Never"/>
     <disable_collisions link1="link_r1" link2="link_l4" reason="Never"/>
     <disable_collisions link1="link_r1" link2="link_l5" reason="Never"/>
+    <disable_collisions link1="link_r1" link2="link_r3" reason="Never"/>
+    <disable_collisions link1="link_r1" link2="link_r4" reason="Never"/>
+    <disable_collisions link1="link_r1" link2="link_r5" reason="Never"/>
+    <disable_collisions link1="link_r1" link2="link_r6" reason="Never"/>
+    <disable_collisions link1="link_r1" link2="link_r7r" reason="Never"/>
     <disable_collisions link1="link_l2" link2="link_l3" reason="Adjacent"/>
     <disable_collisions link1="link_l2" link2="base_right" reason="Never"/>
     <disable_collisions link1="link_l2" link2="link_r2" reason="Never"/>
@@ -108,4 +111,11 @@
     <disable_collisions link1="link_r5" link2="base_left" reason="Never"/>
     <disable_collisions link1="link_r6" link2="link_r7r" reason="Adjacent"/>
     <disable_collisions link1="base_right" link2="base_left" reason="Never"/>
+    <disable_collisions link1="link_l1" link2="link_r5" reason="Never"/>
+    <disable_collisions link1="link_l1" link2="link_l3" reason="Never"/>
+    <disable_collisions link1="link_l1" link2="link_l4" reason="Never"/>
+    <disable_collisions link1="link_l1" link2="link_l5" reason="Never"/>
+    <disable_collisions link1="link_l1" link2="link_l6" reason="Never"/>
+    <disable_collisions link1="link_l1" link2="link_l7l" reason="Never"/>
+    <disable_collisions link1="link_r1" link2="base_left" reason="Never"/>
 </robot>

@@ -6,10 +6,8 @@ controller_manager:
     astra_right_arm_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
-
     astra_right_hand_controller:
       type: joint_trajectory_controller/JointTrajectoryController
-
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
