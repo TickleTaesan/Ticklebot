@@ -11,7 +11,7 @@ from astra_teleop_web.webserver import WebServer
 
 logger = logging.getLogger(__name__)
 
-GRIPPER_MAX = 0.055
+GRIPPER_MAX = 1.0
 INITIAL_LIFT_DISTANCE = 0.8
 
 FAR_SEEING_HEAD_TILT = 0.26
@@ -93,12 +93,12 @@ class Teleopoperator:
             self.webserver.control_datachannel_log("Teleop Mode: None")
             logger.info("Teleop Mode: None")
 
-    async def reset_arm(self, lift_distance=INITIAL_LIFT_DISTANCE, joint_bent=math.pi/4, far_seeing=False):  
+    async def reset_arm(self, lift_distance=INITIAL_LIFT_DISTANCE, joint_bent=math.pi/2, far_seeing=False):  
         self.far_seeing = far_seeing
         self.lift_distance = lift_distance
         goal_pose = {
-            "left": self.on_get_initial_eef_pose("left", [self.lift_distance, joint_bent, -joint_bent, 0, 0, 0]),
-            "right": self.on_get_initial_eef_pose("right", [self.lift_distance, -joint_bent, joint_bent, 0, 0, 0]),
+            "left": self.on_get_initial_eef_pose("left", [self.lift_distance, 0, joint_bent, -joint_bent, 0, 0]),
+            "right": self.on_get_initial_eef_pose("right", [self.lift_distance, 0, joint_bent, -joint_bent, 0, 0]),
         }
 
         while True:
@@ -265,7 +265,7 @@ class Teleopoperator:
         if control_type == "reset":
             self.update_teleop_mode(None)
             self.last_gripper_pos = { "left": GRIPPER_MAX, "right": GRIPPER_MAX }
-            await self.reset_arm(INITIAL_LIFT_DISTANCE, math.pi/4, far_seeing=False)
+            await self.reset_arm(INITIAL_LIFT_DISTANCE, math.pi/2, far_seeing=False)
 
             # # uncomment when collecting datas to avoid stair in the dataset
             # await self.update_percise_mode(percise_mode=True) 
