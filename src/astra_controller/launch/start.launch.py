@@ -153,7 +153,7 @@ def generate_launch_description():
     #         executable="dry_run_node",
     #         namespace='left',
     #         parameters=[{
-    #             'joint_names': [ "joint_l1", "joint_l2", "joint_l3", "joint_l4", "joint_l5", "joint_l6", "joint_l7r", "joint_l7l" ],
+    #             'joint_names': [ "joint_l1", "joint_l2", "joint_l3", "joint_l4", "joint_l5", "joint_l6", "joint_l7l" ],
     #         }],
     #         remappings=[
     #             ('joint_states', '/joint_states'),
@@ -167,7 +167,7 @@ def generate_launch_description():
     #         executable="dry_run_node",
     #         namespace='right',
     #         parameters=[{
-    #             'joint_names': [ "joint_r1", "joint_r2", "joint_r3", "joint_r4", "joint_r5", "joint_r6", "joint_r7r", "joint_r7l" ],
+    #             'joint_names': [ "joint_r1", "joint_r2", "joint_r3", "joint_r4", "joint_r5", "joint_r6", "joint_r7r" ],
     #         }],
     #         remappings=[
     #             ('joint_states', '/joint_states'),
