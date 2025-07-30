@@ -93,7 +93,7 @@ class AstraController:
         TransformListener(tf_buffer, node)
         
         def cb(msg: sensor_msgs.msg.JointState):
-            self.joint_states.update(without_keys(dict(zip(msg.name, msg.position)), ["joint_r7l", "joint_l7l"]))
+            self.joint_states.update(without_keys(dict(zip(msg.name, msg.position)), ["joint_l7l"]))
             
             try:
                 if "joint_l6" in msg.name:
@@ -118,7 +118,7 @@ class AstraController:
         node.create_subscription(nav_msgs.msg.Odometry, "odom", cb, rclpy.qos.qos_profile_sensor_data)
         
         def cb(msg: astra_controller_interfaces.msg.JointCommand):
-            self.joint_commands.update(without_keys(dict(zip(msg.name, msg.position_cmd)), ["joint_r7l", "joint_l7l"]))
+            self.joint_commands.update(without_keys(dict(zip(msg.name, msg.position_cmd)), ["joint_l7l"]))
         node.create_subscription(astra_controller_interfaces.msg.JointCommand, "left/lift/joint_command", cb, rclpy.qos.qos_profile_sensor_data)
         node.create_subscription(astra_controller_interfaces.msg.JointCommand, "left/arm/joint_command", cb, rclpy.qos.qos_profile_sensor_data)
         node.create_subscription(astra_controller_interfaces.msg.JointCommand, "left/arm/gripper_joint_command", cb, rclpy.qos.qos_profile_sensor_data)
@@ -167,7 +167,7 @@ class AstraController:
         }
         
         self.joint_states = {
-            "joint_l1": None, "joint_l2": None, "joint_l3": None, "joint_l4": None, "joint_l5": None, "joint_l6": None, "joint_l7r": None,
+            "joint_l1": None, "joint_l2": None, "joint_l3": None, "joint_l4": None, "joint_l5": None, "joint_l6": None, "joint_l7l": None,
             "joint_r1": None, "joint_r2": None, "joint_r3": None, "joint_r4": None, "joint_r5": None, "joint_r6": None, "joint_r7r": None,
             "joint_head_pan": None, "joint_head_tilt": None,
             "twist_linear": None, "twist_angular": None, 
@@ -177,7 +177,7 @@ class AstraController:
         }
         
         self.joint_commands = {
-            "joint_l1": None, "joint_l2": None, "joint_l3": None, "joint_l4": None, "joint_l5": None, "joint_l6": None, "joint_l7r": None,
+            "joint_l1": None, "joint_l2": None, "joint_l3": None, "joint_l4": None, "joint_l5": None, "joint_l6": None, "joint_l7l": None,
             "joint_r1": None, "joint_r2": None, "joint_r3": None, "joint_r4": None, "joint_r5": None, "joint_r6": None, "joint_r7r": None,
             "joint_head_pan": None, "joint_head_tilt": None,
             "twist_linear": None, "twist_angular": None, 
@@ -229,7 +229,7 @@ class AstraController:
         if self.space == "joint":
             action = [self.joint_commands[key] for key in [
                 "joint_l1", "joint_l2", "joint_l3", "joint_l4", "joint_l5", "joint_l6",
-                "joint_l7r",
+                "joint_l7l",
                 "joint_r1", "joint_r2", "joint_r3", "joint_r4", "joint_r5", "joint_r6",
                 "joint_r7r",
                 "twist_linear", "twist_angular", 
@@ -237,7 +237,7 @@ class AstraController:
             ]]
         elif self.space == "cartesian":
             action = self.joint_commands["eef_l"] + self.joint_commands["eef_r"] + [self.joint_commands[key] for key in [
-                "joint_l7r",
+                "joint_l7l",
                 "joint_r7r",
                 "twist_linear", "twist_angular", 
                 "joint_head_pan", "joint_head_tilt",
@@ -248,7 +248,7 @@ class AstraController:
         return action, [self.joint_commands[key] for key in [
             "joint_l1", "joint_l2", "joint_l3", "joint_l4", "joint_l5", "joint_l6",
         ]], [self.joint_commands[key] for key in [
-            "joint_l7r",
+            "joint_l7l",
         ]], [self.joint_commands[key] for key in [
             "joint_r1", "joint_r2", "joint_r3", "joint_r4", "joint_r5", "joint_r6",
         ]], [self.joint_commands[key] for key in [
@@ -263,7 +263,7 @@ class AstraController:
         if self.space == "joint":
             observation = [self.joint_states[key] for key in [
                 "joint_l1", "joint_l2", "joint_l3", "joint_l4", "joint_l5", "joint_l6",
-                "joint_l7r",
+                "joint_l7l",
                 "joint_r1", "joint_r2", "joint_r3", "joint_r4", "joint_r5", "joint_r6",
                 "joint_r7r",
                 "twist_linear", "twist_angular", 

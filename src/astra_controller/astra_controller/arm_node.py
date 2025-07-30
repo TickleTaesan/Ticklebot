@@ -19,7 +19,7 @@ def main(args=None):
     
     node.declare_parameter('device', '/dev/tty_puppet_right')
     node.declare_parameter('joint_names', [ "joint_r2", "joint_r3", "joint_r4", "joint_r5", "joint_r6" ])
-    node.declare_parameter('gripper_joint_names', [ "joint_r7l", "joint_r7r" ])
+    node.declare_parameter('gripper_joint_names', [ "joint_r7r" ])
 
     device = node.get_parameter('device').value
     joint_names = node.get_parameter('joint_names').value
