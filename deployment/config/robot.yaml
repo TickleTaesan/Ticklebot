@@ -1,6 +1,6 @@
 # linear and angular speed limits for the robot
-max_v: 0.2 #0.4 # m/s
-max_w: 0.4 #0.8 # rad/s
+max_v: 2.33 # m/s (실제 로봇 최대 선속도)
+max_w: 5.0 # rad/s (안전한 각속도 - 실제 최대값의 약 28%)
 # observation rate fo the robot
 frame_rate: 4 # Hz
 graph_rate: 0.3333 # Hz  
@@ -9,5 +9,11 @@ graph_rate: 0.3333 # Hz
 vel_teleop_topic: /cmd_vel_mux/input/teleop 
 vel_navi_topic: /cmd_vel_mux/input/navi
 vel_recovery_topic: /cmd_vel_mux/input/recovery
+
+# ODESC 3.6 v0.5.1 설정
+odesc_serial_port: /dev/ttyUSB0
+odesc_baudrate: 115200
+wheel_separation: 0.26  # 휠 간격 (m) - 실제 측정값
+wheel_radius: 0.069     # 휠 반지름 (m) - 실제 측정값
 
 
