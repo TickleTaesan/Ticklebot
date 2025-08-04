@@ -90,46 +90,7 @@
       effort="0"
       velocity="0" />
   </joint>
-  <link
-    name="link_r2">
-    <inertial>
-      <origin
-        xyz="0.19797 -0.02415 -2.5183E-11"
-        rpy="0 0 0" />
-      <mass
-        value="0.75209" />
-      <inertia
-        ixx="0.0004318"
-        ixy="0.00031904"
-        ixz="-1.4792E-09"
-        iyy="0.0020715"
-        iyz="1.806E-10"
-        izz="0.0019227" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="../meshes/link_r2.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.75294 0.75294 0.75294 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="../meshes/link_r2.STL" />
-      </geometry>
-    </collision>
-  </link>
+
   <!-- SO-100 Right Arm Links -->
   
   <!-- SO-100 Right Base Link -->
@@ -470,46 +431,7 @@
       effort="0"
       velocity="0" />
   </joint>
-  <link
-    name="link_l2">
-    <inertial>
-      <origin
-        xyz="0.19797 0.02415 1.1147E-11"
-        rpy="0 0 0" />
-      <mass
-        value="0.75209" />
-      <inertia
-        ixx="0.0004318"
-        ixy="-0.00031904"
-        ixz="1.4791E-09"
-        iyy="0.0020715"
-        iyz="1.8051E-10"
-        izz="0.0019227" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="../meshes/link_l2.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.75294 0.75294 0.75294 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="../meshes/link_l2.STL" />
-      </geometry>
-    </collision>
-  </link>
+
   <!-- SO-100 Left Arm Links -->
   
   <!-- SO-100 Left Base Link -->
