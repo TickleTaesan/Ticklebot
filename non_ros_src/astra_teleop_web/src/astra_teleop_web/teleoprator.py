@@ -97,8 +97,8 @@ class Teleopoperator:
         self.far_seeing = far_seeing
         self.lift_distance = lift_distance
         goal_pose = {
-            "left": self.on_get_initial_eef_pose("left", [self.lift_distance, 0, joint_bent, -joint_bent, 0, 0]),
-            "right": self.on_get_initial_eef_pose("right", [self.lift_distance, 0, joint_bent, -joint_bent, 0, 0]),
+            "left": self.on_get_initial_eef_pose("left", [self.lift_distance, 0, joint_bent, -joint_bent, 0, 0]), #left, right arm isn't scara sytle, so no reflection is needid.
+            "right": self.on_get_initial_eef_pose("right", [self.lift_distance, 0, joint_bent, -joint_bent, 0, 0]), #joint bent value is 1.57 rad, and list in order of r1, r2, r3, r4, r5, r6(same with left side). set valid state for eef pose. pose image is sent in message.
         }
 
         while True:
