@@ -4,6 +4,12 @@ import sys
 import io
 import matplotlib.pyplot as plt
 
+# Python 경로 자동 설정
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.join(current_dir, '../..')
+sys.path.append(os.path.join(project_root, 'train'))
+sys.path.append(os.path.join(project_root, 'train/vint_train/models'))
+
 # ROS
 from sensor_msgs.msg import Image
 
