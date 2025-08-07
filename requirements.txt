@@ -6,10 +6,14 @@
 numpy==1.24.3
 matplotlib==3.7.1
 pyyaml==6.0.1
-pillow==10.0.0
-tqdm==4.65.0
-opencv-python==4.8.0.76
+pillow==9.5.0
+tqdm==4.64.1
+opencv-python-headless==4.7.0.72
 h5py==3.8.0
+
+# PyTorch and related (install separately for GPU support)
+# torch==1.13.1
+# torchvision==0.14.1
 
 # NoMaD specific dependencies
 diffusers==0.11.1
@@ -28,6 +32,13 @@ requests==2.31.0
 urllib3==2.0.4
 sympy==1.12
 networkx==3.1
+
+# Training and logging
+wandb==0.15.8
+prettytable==3.8.0
+
+# HuggingFace dependencies
+huggingface_hub==0.16.4
 
 # Optional: For development and debugging
 ipython==8.14.0
