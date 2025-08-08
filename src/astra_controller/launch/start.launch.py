@@ -147,7 +147,7 @@ def generate_launch_description():
     #     )
     # )
     
-    # Fake Arms - using dry run node for testing
+   # Fake Arms - using dry run node for testing
     ld.add_action(
         Node(
             package=package_name,
@@ -175,6 +175,7 @@ def generate_launch_description():
             ],
         )
     )
+
     
     # IK - commented out due to URDF parsing issues
     # ld.add_action(
@@ -239,15 +240,15 @@ def generate_launch_description():
         )
     )
     
-    # Visualization - enabled to provide TF tree
-    ld.add_action(
-        IncludeLaunchDescription(
-            FrontendLaunchDescriptionSource([
-                str(Path(get_package_share_directory('astra_description'))
-                    / 'launch' / 'publish_model.launch'), 
-            ]),
-        )
-    )
+    # # Visualization - enabled to provide TF tree
+    # ld.add_action(
+    #     IncludeLaunchDescription(
+    #         FrontendLaunchDescriptionSource([
+    #             str(Path(get_package_share_directory('astra_description'))
+    #                 / 'launch' / 'publish_model.launch'), 
+    #         ]),
+    #     )
+    # )
 
     # ld.add_action(
     #     Node(

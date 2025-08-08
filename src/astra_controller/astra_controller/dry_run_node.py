@@ -26,7 +26,7 @@ def main(args=None):
     actively_send_joint_state = node.get_parameter('actively_send_joint_state').value
     joint_names = node.get_parameter('joint_names').value
     
-    assert len(joint_names) == 7
+    assert len(joint_names) == 7  # 7개: joint_l1 + 5개 arm joints + 1개 gripper joint
 
     if actively_send_joint_state:
         # actively send current joint_state

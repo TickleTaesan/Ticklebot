@@ -11,8 +11,8 @@ from astra_teleop_web.webserver import WebServer
 
 logger = logging.getLogger(__name__)
 
-GRIPPER_MAX = 0.055
-INITIAL_LIFT_DISTANCE = 0.8
+GRIPPER_MAX = 1.0
+INITIAL_LIFT_DISTANCE = 0.0
 
 FAR_SEEING_HEAD_TILT = 0.26
 
@@ -93,28 +93,20 @@ class Teleopoperator:
             self.webserver.control_datachannel_log("Teleop Mode: None")
             logger.info("Teleop Mode: None")
 
-    async def reset_arm(self, lift_distance=INITIAL_LIFT_DISTANCE, joint_bent=math.pi/4, far_seeing=False):  
+    async def reset_arm(self, lift_distance=INITIAL_LIFT_DISTANCE, joint_bent=math.pi/2, far_seeing=False):  
         self.far_seeing = far_seeing
         self.lift_distance = lift_distance
         
-        # Validate and clamp joint values to reasonable limits
-        lift_distance_clamped = max(0.0, min(1.2, self.lift_distance))  # joint_r1 limits
-        joint_bent_clamped = max(-1.57, min(1.57, joint_bent))  # joint_r2-r6 limits
+        # More conservative initial joint angles for new URDF joint limits
+        # joint_r3 now has range 0-3.5, so we use smaller angles
+        initial_joints = [self.lift_distance, 0, 0.5, -0.5, 0, 0]  # Much more conservative angles
         
         goal_pose = {
-            "left": self.on_get_initial_eef_pose("left", [lift_distance_clamped, joint_bent_clamped, -joint_bent_clamped, 0, 0, 0]),
-            "right": self.on_get_initial_eef_pose("right", [lift_distance_clamped, -joint_bent_clamped, joint_bent_clamped, 0, 0, 0]),
+            "left": self.on_get_initial_eef_pose("left", [self.lift_distance, 0, joint_bent, -joint_bent, 0, 0]), #left, right arm isn't scara sytle, so no reflection is needid.
+            "right": self.on_get_initial_eef_pose("right", [self.lift_distance, 0, joint_bent, -joint_bent, 0, 0]), #joint bent value is 1.57 rad, and list in order of r1, r2, r3, r4, r5, r6(same with left side). set valid state for eef pose. pose image is sent in message.
         }
-        
-        logger.info(f"Reset arm with lift_distance: {lift_distance_clamped}, joint_bent: {joint_bent_clamped}")
-        logger.info(f"Left arm joint values: [{lift_distance_clamped}, {joint_bent_clamped}, {-joint_bent_clamped}, 0, 0, 0]")
-        logger.info(f"Right arm joint values: [{lift_distance_clamped}, {-joint_bent_clamped}, {joint_bent_clamped}, 0, 0, 0]")
 
-        # Add a timeout to prevent infinite loops
-        max_iterations = 100  # 10 seconds with 0.1s sleep
-        iteration = 0
-        
-        while iteration < max_iterations:
+        while True:
             ok = True
             for side in ["left", "right"]:
                 curr_pose = self.on_get_current_eef_pose(side)
@@ -128,10 +120,9 @@ class Teleopoperator:
                     curr_pose_pq[3:]
                 )
             
-                # Increase tolerance values to be more reasonable
-                if not (pos_dist < 0.05 and rot_dist < 0.1):  # Increased from 0.02 and 0.03
+                # Much more relaxed tolerances for better convergence with new URDF
+                if not (pos_dist < 0.25 and rot_dist < 0.3):  # Increased from 0.08/0.12
                     logger.info(f"Resetting {side}: pos_dist {pos_dist}m, rot_dist {rot_dist}rad, curr_pose: \n{curr_pose}")
-                    logger.info(f"Goal pose for {side}: \n{goal_pose[side]}")
                     ok = False            
             if ok:
                 break
@@ -145,12 +136,7 @@ class Teleopoperator:
             else:
                 self.on_pub_head(0, self.get_head_tilt(self.lift_distance))
             
-            iteration += 1
             await asyncio.sleep(0.1)
-        
-        if iteration >= max_iterations:
-            logger.warning("Reset arm timeout reached. Arms may not have reached target poses.")
-            self.webserver.control_datachannel_log("Reset arm timeout reached")
 
     def get_head_tilt(self, lift_distance):
         point0_lift = 0
@@ -161,60 +147,74 @@ class Teleopoperator:
         return point0_tilt + (point1_tilt - point0_tilt) * (lift_distance - point0_lift) / (point1_lift - point0_lift)
 
     def hand_cb(self, camera_matrix, distortion_coefficients, corners, ids):
-        Tcamgoal = {}
+        try:
+            Tcamgoal = {}
 
-        Tcamgoal["left"], Tcamgoal["right"] = self.solve(
-            camera_matrix, distortion_coefficients,
-            aruco_corners=corners, aruco_ids=ids,
-            debug=False,
-            debug_image=None,
-        ) # 1ms@1080p
-        
-        for side in ["left", "right"]:
-            if Tcamgoal[side] is not None:
-                if self.Tcamgoal_last[side] is None:
-                    self.Tcamgoal_last[side] = Tcamgoal[side]
-
-                if self.percise_mode:
-                    # low_pass_coff = 0.1
-                    # Tcamgoal[side] = pt.transform_from_pq(pt.pq_slerp(
-                    #     pt.pq_from_transform(self.Tcamgoal_last[side]),
-                    #     pt.pq_from_transform(Tcamgoal[side]),
-                    #     low_pass_coff
-                    # ))
-
-                    # trust for sensor read (in this case, opencv on web client)
-                    p_low_pass_coff = 0.1
-                    q_low_pass_coff = 0.1
-                    pq_camgoal_last = pt.pq_from_transform(self.Tcamgoal_last[side])
-                    pq_camgoal = pt.pq_from_transform(Tcamgoal[side])
-                    p = pq_camgoal_last[:3] * (1 - p_low_pass_coff) + pq_camgoal[:3] * p_low_pass_coff
-                    q = pr.quaternion_slerp(pq_camgoal_last[3:], pq_camgoal[3:], q_low_pass_coff, shortest_path=True)
-                    Tcamgoal[side] = pt.transform_from_pq(np.concatenate([p, q]))
-
-                self.Tcamgoal_last[side] = Tcamgoal[side]
-
-        if self.teleop_mode is not None:
-            for side in ["left", "right"]:
-                if self.Tcamgoal_last[side] is None:
-                    self.webserver.control_datachannel_log(f"Connect capture and making sure {side} are in the camera view!")
-                    raise Exception(f"Connect capture and making sure {side} are in the camera view!")
-
-            for side in ["left", "right"]:
-                if self.Tscam[side] is None:
-                    self.webserver.control_datachannel_log(f"Reset {side} arm first!")
-                    raise Exception(f"Reset {side} arm first!")
+            Tcamgoal["left"], Tcamgoal["right"] = self.solve(
+                camera_matrix, distortion_coefficients,
+                aruco_corners=corners, aruco_ids=ids,
+                debug=False,
+                debug_image=None,
+            ) # 1ms@1080p
             
             for side in ["left", "right"]:
-            # for side in ["left"]:
-                Tsgoal = self.Tscam[side] @ self.Tcamgoal_last[side]
-                self.on_pub_goal(side, Tsgoal, Tscam=self.Tscam[side], Tsgoal_inactive=Tsgoal)
-        
-            if self.far_seeing:
-                self.on_pub_head(0, FAR_SEEING_HEAD_TILT)
-            else:
-                self.on_pub_head(0, self.get_head_tilt(self.lift_distance))
-        
+                if Tcamgoal[side] is not None:
+                    if self.Tcamgoal_last[side] is None:
+                        self.Tcamgoal_last[side] = Tcamgoal[side]
+                        logger.info(f"Initialized Tcamgoal_last for {side}")
+
+                    if self.percise_mode:
+                        # low_pass_coff = 0.1
+                        # Tcamgoal[side] = pt.transform_from_pq(pt.pq_slerp(
+                        #     pt.pq_from_transform(self.Tcamgoal_last[side]),
+                        #     pt.pq_from_transform(Tcamgoal[side]),
+                        #     low_pass_coff
+                        # ))
+
+                        # trust for sensor read (in this case, opencv on web client)
+                        p_low_pass_coff = 0.1
+                        q_low_pass_coff = 0.1
+                        pq_camgoal_last = pt.pq_from_transform(self.Tcamgoal_last[side])
+                        pq_camgoal = pt.pq_from_transform(Tcamgoal[side])
+                        p = pq_camgoal_last[:3] * (1 - p_low_pass_coff) + pq_camgoal[:3] * p_low_pass_coff
+                        q = pr.quaternion_slerp(pq_camgoal_last[3:], pq_camgoal[3:], q_low_pass_coff, shortest_path=True)
+                        Tcamgoal[side] = pt.transform_from_pq(np.concatenate([p, q]))
+
+                    self.Tcamgoal_last[side] = Tcamgoal[side]
+
+            if self.teleop_mode is not None:
+                logger.debug(f"Teleop mode: {self.teleop_mode}")
+                
+                for side in ["left", "right"]:
+                    if self.Tcamgoal_last[side] is None:
+                        self.webserver.control_datachannel_log(f"Connect capture and making sure {side} are in the camera view!")
+                        logger.warning(f"Tcamgoal_last[{side}] is None")
+                        return  # Don't raise exception, just return
+
+                for side in ["left", "right"]:
+                    if self.Tscam[side] is None:
+                        self.webserver.control_datachannel_log(f"Reset {side} arm first!")
+                        logger.warning(f"Tscam[{side}] is None")
+                        return  # Don't raise exception, just return
+                
+                logger.info("Starting arm control loop...")
+                
+                for side in ["left", "right"]:
+                # for side in ["left"]:
+                    Tsgoal = self.Tscam[side] @ self.Tcamgoal_last[side]
+                    self.on_pub_goal(side, Tsgoal, Tscam=self.Tscam[side], Tsgoal_inactive=Tsgoal)
+                    logger.info(f"Published goal for {side} arm - Tsgoal: \n{Tsgoal}")
+            
+                if self.far_seeing:
+                    self.on_pub_head(0, FAR_SEEING_HEAD_TILT)
+                else:
+                    self.on_pub_head(0, self.get_head_tilt(self.lift_distance))
+                    
+        except Exception as e:
+            logger.error(f"Error in hand_cb: {e}")
+            self.webserver.control_datachannel_log(f"Error in hand_cb: {e}")
+            # Don't re-raise the exception to prevent function from stopping
+
     def pedal_cb(self, pedal_real_values):
         pedal_names = ["angular-pos", "angular-neg", "linear-neg", "linear-pos"]
         pedal_names_arm_mode = ["left-gripper", "lift-neg", "lift-pos", "right-gripper"]
@@ -285,7 +285,7 @@ class Teleopoperator:
         if control_type == "reset":
             self.update_teleop_mode(None)
             self.last_gripper_pos = { "left": GRIPPER_MAX, "right": GRIPPER_MAX }
-            await self.reset_arm(INITIAL_LIFT_DISTANCE, math.pi/4, far_seeing=False)
+            await self.reset_arm(INITIAL_LIFT_DISTANCE, math.pi/2, far_seeing=False)
 
             # # uncomment when collecting datas to avoid stair in the dataset
             # await self.update_percise_mode(percise_mode=True) 
@@ -310,12 +310,12 @@ class Teleopoperator:
             self.update_teleop_mode("arm")
         elif control_type == "teleop_mode_base_with_reset":
             self.update_teleop_mode(None)
-            await self.reset_arm(self.lift_distance, math.pi/2*0.9, far_seeing=True)
+            await self.reset_arm(self.lift_distance, 0.5, far_seeing=True)  # Changed to more conservative angle
             await self.update_percise_mode(percise_mode=True)
             self.update_teleop_mode("base")
         elif control_type == "teleop_mode_arm_with_reset":
             self.update_teleop_mode(None)            
-            await self.reset_arm(self.lift_distance, math.pi/4, far_seeing=False)
+            await self.reset_arm(self.lift_distance, 0.3, far_seeing=False)  # Changed to more conservative angle
             await self.update_percise_mode(percise_mode=True)
             self.update_teleop_mode("arm")
         elif control_type == "percise_mode_false":

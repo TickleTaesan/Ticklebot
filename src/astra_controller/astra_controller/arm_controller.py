@@ -168,8 +168,8 @@ class ArmController:
         with self.write_lock:
             self.ser.write(encoded_data)
 
-    JOINT_MIN = np.array([-math.pi/2, -math.pi/2, -math.pi*0.999, -math.pi/2, -math.pi*0.875, -math.pi/2])
-    JOINT_MAX = np.array([math.pi/2, math.pi/2, math.pi*0.999, math.pi/2, math.pi*0.875, math.pi/2])
+    JOINT_MIN = np.array([0.0, -2.0, 0.0, -3.14158, -2.5, -3.14158])
+    JOINT_MAX = np.array([1.2, 2.0, 3.5, 0.0, 1.2, 3.14158])
 
     def set_pos(self, pos):
         ok = True

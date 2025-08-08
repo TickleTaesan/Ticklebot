@@ -19,14 +19,14 @@ def main(args=None):
     
     node.declare_parameter('device', '/dev/tty_puppet_right')
     node.declare_parameter('joint_names', [ "joint_r2", "joint_r3", "joint_r4", "joint_r5", "joint_r6" ])
-    node.declare_parameter('gripper_joint_names', [ "joint_r7l", "joint_r7r" ])
+    node.declare_parameter('gripper_joint_names', [ "joint_r7r" ])
 
     device = node.get_parameter('device').value
     joint_names = node.get_parameter('joint_names').value
     gripper_joint_names = node.get_parameter('gripper_joint_names').value
     
     assert len(joint_names) == 5
-    assert len(gripper_joint_names) == 2
+    assert len(gripper_joint_names) == 1
 
     arm_controller = ArmController(device)
     
@@ -44,9 +44,9 @@ def main(args=None):
         msg = sensor_msgs.msg.JointState()
         msg.header.stamp = node.get_clock().now().to_msg()
         msg.name = gripper_joint_names
-        msg.position = [ -float(position[5]), float(position[5]) ]
-        msg.velocity = [ -float(velocity[5]), float(velocity[5]) ]
-        msg.effort = [ -float(effort[5]), float(effort[5]) ]
+        msg.position = [ float(position[5]) ]
+        msg.velocity = [ float(velocity[5]) ]
+        msg.effort = [ float(effort[5]) ]
         gripper_joint_state_publisher.publish(msg)
     arm_controller.state_cb = cb
 
@@ -83,7 +83,7 @@ def main(args=None):
     
     def cb(msg: astra_controller_interfaces.msg.JointCommand):
         nonlocal last_position_cmd
-        assert msg.name == gripper_joint_names[1:2]
+        assert msg.name == gripper_joint_names[0:1]
         position_cmd = [*last_position_cmd[:5], msg.position_cmd[0]]
         arm_controller.set_pos(position_cmd)
         last_position_cmd = position_cmd

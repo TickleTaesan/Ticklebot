@@ -25,7 +25,6 @@ def main(args=None):
         "joint_r4": 0, 
         "joint_r5": 0, 
         "joint_r6": 0, 
-        "joint_r7l": 0, 
         "joint_r7r": 0
     }
 

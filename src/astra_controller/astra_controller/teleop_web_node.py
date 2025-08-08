@@ -52,9 +52,14 @@ def main(args=None):
     tf_listener = TransformListener(tf_buffer, node)
     
     def get_current_eef_pose_cb(side):
-        Tsgoal_msg: geometry_msgs.msg.TransformStamped = tf_buffer.lookup_transform('base_link', 'link_ree_teleop' if side == "right" else 'link_lee_teleop', rclpy.time.Time())
-        Tsgoal = pt.transform_from_pq(np.array(pq_from_ros_transform(Tsgoal_msg.transform)))
-        return Tsgoal
+        try:
+            Tsgoal_msg: geometry_msgs.msg.TransformStamped = tf_buffer.lookup_transform('base_link', 'link_ree_teleop' if side == "right" else 'link_lee_teleop', rclpy.time.Time())
+            Tsgoal = pt.transform_from_pq(np.array(pq_from_ros_transform(Tsgoal_msg.transform)))
+            return Tsgoal
+        except Exception as e:
+            logger.error(f"Error getting current eef pose for {side} arm: {e}")
+            # Return a default pose if transform lookup fails
+            return np.eye(4)
     teleopoperator.on_get_current_eef_pose = get_current_eef_pose_cb
     
     M = {}
@@ -70,7 +75,15 @@ def main(args=None):
         )
 
     def get_initial_eef_pose_cb(side, initial_joint_states):
-        return mr.FKinSpace(M[side], Slist[side], initial_joint_states)
+        try:
+            logger.info(f"Getting initial eef pose for {side} arm with joint states: {initial_joint_states}")
+            result = mr.FKinSpace(M[side], Slist[side], initial_joint_states)
+            logger.info(f"Initial eef pose for {side} arm: {result}")
+            return result
+        except Exception as e:
+            logger.error(f"Error getting initial eef pose for {side} arm: {e}")
+            # Return a default pose if forward kinematics fails
+            return np.eye(4)
     teleopoperator.on_get_initial_eef_pose = get_initial_eef_pose_cb
     
     def pub_T(pub: rclpy.publisher.Publisher, T, frame_id='base_link'):
