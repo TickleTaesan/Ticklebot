@@ -10,6 +10,28 @@
 - USB 카메라
 - ODESC 3.6 v0.5.1 BLDC 모터 드라이버
 
+## 🔧 의존성 패키지 설치
+
+### diffusion_policy 패키지 설치
+deployment 모듈이 diffusion_policy 패키지에 의존하므로 먼저 설치해야 합니다:
+
+```bash
+# 1. diffusion_policy 패키지 설치
+cd ~/nomad/diffusion_policy
+pip install -e .
+
+# 2. 영구적으로 PYTHONPATH 설정
+echo 'export PYTHONPATH="${PYTHONPATH}:~/nomad/diffusion_policy"' >> ~/.bashrc
+
+# 3. 현재 세션에 즉시 적용
+source ~/.bashrc
+
+# 4. 설치 확인
+python3 -c "import diffusion_policy; print('✅ 설치 완료')"
+```
+
+**중요**: 이 설정은 한 번만 하면 되며, 앞으로 터미널을 새로 열 때마다 자동으로 적용됩니다.
+
 ## 🚀 환경 설정
 
 ### 1단계: Docker 설치 (Jetson Orin)
