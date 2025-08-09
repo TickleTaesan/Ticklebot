@@ -178,33 +178,33 @@ def generate_launch_description():
 
     
     # IK - now working with fixed URDF loading
-    ld.add_action(
-        Node(
-            package=package_name,
-            executable="ik_node",
-            namespace='left',
-            parameters=[{
-                'eef_link_name': 'link_lee_teleop', 
-                'joint_names': ['joint_l1', 'joint_l2', 'joint_l3', 'joint_l4', 'joint_l5', 'joint_l6'],
-            }],
-            output='screen',
-            emulate_tty=True,
-        )
-    )
+    # ld.add_action(
+    #     Node(
+    #         package=package_name,
+    #         executable="ik_node",
+    #         namespace='left',
+    #         parameters=[{
+    #             'eef_link_name': 'link_lee_teleop', 
+    #             'joint_names': ['joint_l1', 'joint_l2', 'joint_l3', 'joint_l4', 'joint_l5', 'joint_l6'],
+    #         }],
+    #         output='screen',
+    #         emulate_tty=True,
+    #     )
+    # )
     
-    ld.add_action(
-        Node(
-            package=package_name,
-            executable="ik_node",
-            namespace='right',
-            parameters=[{
-                'eef_link_name': 'link_ree_teleop',
-                'joint_names': ['joint_r1', 'joint_r2', 'joint_r3', 'joint_r4', 'joint_r5', 'joint_r6'],
-            }],
-            output='screen',
-            emulate_tty=True,
-        )
-    )
+    # ld.add_action(
+    #     Node(
+    #         package=package_name,
+    #         executable="ik_node",
+    #         namespace='right',
+    #         parameters=[{
+    #             'eef_link_name': 'link_ree_teleop',
+    #             'joint_names': ['joint_r1', 'joint_r2', 'joint_r3', 'joint_r4', 'joint_r5', 'joint_r6'],
+    #         }],
+    #         output='screen',
+    #         emulate_tty=True,
+    #     )
+    # )
     
     # Base - commented out due to CAN interface issues
     # ld.add_action(
