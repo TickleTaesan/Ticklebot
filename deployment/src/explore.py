@@ -1,4 +1,4 @@
-
+from pathlib import Path
 import matplotlib.pyplot as plt
 import os
 from typing import Tuple, Sequence, Dict, Union, Optional, Callable
@@ -6,7 +6,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
-
+import argparse
 import matplotlib.pyplot as plt
 import yaml
 
@@ -25,6 +25,22 @@ import yaml
 import time
 
 
+def get_repo_root() -> Path:
+
+    here = Path(__file__).resolve()
+
+    for p in [here.parents[2], *here.parents]:
+        if (p / "train" / "config").exists() and (p / "deployment" / "src").exists():
+            return p
+
+    env = os.getenv("NOMAD_ROOT")
+    if env:
+        return Path(env).expanduser().resolve()
+
+    return here.parents[2]
+
+REPO_ROOT = get_repo_root()
+repo_root = REPO_ROOT
 # UTILS
 from topic_names import (IMAGE_TOPIC,
                         WAYPOINT_TOPIC,
@@ -66,14 +82,41 @@ def main(args: argparse.Namespace):
     with open(MODEL_CONFIG_PATH, "r") as f:
         model_paths = yaml.safe_load(f)
 
-    model_config_path = model_paths[args.model]["config_path"]
-    with open(model_config_path, "r") as f:
-        model_params = yaml.safe_load(f)
+    #repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+   # model_config_path = model_paths[args.model]["config_path"]
+   # if not os.path.isabs(model_config_path):
+    #    model_config_path = os.path.join(repo_root, model_config_path)
+    default_cfg = REPO_ROOT / "train" / "config" / f"{args.model}.yaml"
+    model_config_path = Path(args.config).resolve() if args.config else default_cfg
+    try:
+        with open(model_config_path, "r") as f:
+             cfg = yaml.safe_load(f) or {}
+    except Exception as e:
+        raise RuntimeError(f"Failed to load config: {model_config_path}\n{e}")
+    model_params = cfg.get("model", cfg)
+    required_keys = ["context_size"] 
+    missing = [k for k in required_keys if k not in model_params]
+    if missing:
+        raise KeyError(
+            f"Missing keys in {model_config_path}: {missing}\n"
+            f"Available keys: {list(model_params.keys())}"
+        )
+    if not model_config_path.exists():
+        raise FileNotFoundError(
+             f"Config not found: {model_config_path}\n"
+             f"(Repo root guessed as: {REPO_ROOT})\n"
+             f"Tip: pass --config /absolute/path/to/nomad.yaml"
+        )
+        with open(model_config_path, "r") as f:
+            model_params = yaml.safe_load(f)
 
     context_size = model_params["context_size"]
 
     # load model weights
     ckpth_path = model_paths[args.model]["ckpt_path"]
+    if not os.path.isabs(ckpth_path):
+        ckpth_path = os.path.join(repo_root, ckpth_path)
+
     if os.path.exists(ckpth_path):
         print(f"Loading model from {ckpth_path}")
     else:
@@ -197,6 +240,13 @@ if __name__ == "__main__":
         type=int,
         help=f"Number of actions sampled from the exploration model (default: 8)",
     )
+    parser.add_argument(
+        "--config",
+        type=str,
+        default=None,
+        help="Path to model config YAML (default: <repo>/train/config/<model>.yaml)"
+    )
+    args = parser.parse_args()
     args = parser.parse_args()
     print(f"Using {device}")
     main(args)

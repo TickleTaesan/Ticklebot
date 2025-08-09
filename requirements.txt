@@ -14,11 +14,11 @@ h5py==3.8.0
 # NoMaD specific dependencies
 diffusers==0.11.1
 efficientnet-pytorch==0.7.1
-warmup-scheduler==0.3.2
+warmup-scheduler==0.3
 
 # Vision and attention models
 einops==0.6.1
-vit-pytorch==1.1.20
+vit-pytorch==1.1.*
 timm==0.9.2
 transformers==4.21.3
 
@@ -30,5 +30,5 @@ sympy==1.12
 networkx==3.1
 
 # Optional: For development and debugging
-ipython==8.14.0
+ipython==8.12.3
 jupyter==1.0.0

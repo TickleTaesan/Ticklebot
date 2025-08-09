@@ -2,7 +2,7 @@ import argparse
 import os
 from utils import msg_to_pil 
 import time
-
+import shutil
 # ROS
 import rospy
 from sensor_msgs.msg import Image
