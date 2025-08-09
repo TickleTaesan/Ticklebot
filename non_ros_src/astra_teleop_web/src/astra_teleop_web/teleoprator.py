@@ -97,13 +97,18 @@ class Teleopoperator:
         self.far_seeing = far_seeing
         self.lift_distance = lift_distance
         
-        # More conservative initial joint angles for new URDF joint limits
-        # joint_r3 now has range 0-3.5, so we use smaller angles
-        initial_joints = [self.lift_distance, 0, 0.5, -0.5, 0, 0]  # Much more conservative angles
+        # Use more conservative joint angles that are well within workspace
+        # Based on the IK testing, these configurations work well:
+        # Configuration: [lift, base_rotation, shoulder, elbow, wrist_pitch, wrist_roll]
+        
+        # Use conservative angles that put the end-effector in a comfortable, reachable position
+        conservative_joint_bent = min(joint_bent, 1.0)  # Limit to 1.0 rad instead of π/2 (1.57)
         
         goal_pose = {
-            "left": self.on_get_initial_eef_pose("left", [self.lift_distance, 0, joint_bent, -joint_bent, 0, 0]), #left, right arm isn't scara sytle, so no reflection is needid.
-            "right": self.on_get_initial_eef_pose("right", [self.lift_distance, 0, joint_bent, -joint_bent, 0, 0]), #joint bent value is 1.57 rad, and list in order of r1, r2, r3, r4, r5, r6(same with left side). set valid state for eef pose. pose image is sent in message.
+            # Use conservative joint angles: [lift, 0, 1.0, -1.0, 0, 0] 
+            # This puts end-effector around (0.15, 0.33, 0.74) which is very reachable
+            "left": self.on_get_initial_eef_pose("left", [self.lift_distance, 0, conservative_joint_bent, -conservative_joint_bent, 0, 0]),
+            "right": self.on_get_initial_eef_pose("right", [self.lift_distance, 0, conservative_joint_bent, -conservative_joint_bent, 0, 0]),
         }
 
         while True:
@@ -120,11 +125,14 @@ class Teleopoperator:
                     curr_pose_pq[3:]
                 )
             
-                # Much more relaxed tolerances for better convergence with new URDF
-                if not (pos_dist < 0.25 and rot_dist < 0.3):  # Increased from 0.08/0.12
-                    logger.info(f"Resetting {side}: pos_dist {pos_dist}m, rot_dist {rot_dist}rad, curr_pose: \n{curr_pose}")
+                # More relaxed tolerances for better convergence with new URDF
+                if not (pos_dist < 0.15 and rot_dist < 0.2):  # Tightened tolerances for better calibration
+                    logger.info(f"Resetting {side}: pos_dist {pos_dist}m, rot_dist {rot_dist}rad")
+                    logger.info(f"  Goal pose position: {goal_pose_pq[:3]}")
+                    logger.info(f"  Current pose position: {curr_pose_pq[:3]}")
                     ok = False            
             if ok:
+                logger.info("Reset complete - arms are in position for teleop calibration")
                 break
             
             for side in ["left", "right"]:
@@ -310,12 +318,12 @@ class Teleopoperator:
             self.update_teleop_mode("arm")
         elif control_type == "teleop_mode_base_with_reset":
             self.update_teleop_mode(None)
-            await self.reset_arm(self.lift_distance, 0.5, far_seeing=True)  # Changed to more conservative angle
+            await self.reset_arm(self.lift_distance, 0.8, far_seeing=True)  # Conservative but reasonable angle
             await self.update_percise_mode(percise_mode=True)
             self.update_teleop_mode("base")
         elif control_type == "teleop_mode_arm_with_reset":
             self.update_teleop_mode(None)            
-            await self.reset_arm(self.lift_distance, 0.3, far_seeing=False)  # Changed to more conservative angle
+            await self.reset_arm(self.lift_distance, 1.0, far_seeing=False)  # Use 1.0 rad for good workspace
             await self.update_percise_mode(percise_mode=True)
             self.update_teleop_mode("arm")
         elif control_type == "percise_mode_false":

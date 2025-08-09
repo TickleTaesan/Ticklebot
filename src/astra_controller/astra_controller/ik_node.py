@@ -18,6 +18,7 @@ from mr_urdf_loader import loadURDF
 from pytransform3d import transformations as pt
 
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -34,42 +35,84 @@ def pq_from_ros_pose(msg: geometry_msgs.msg.Pose):
         msg.orientation.z
     ]
 
+
 def main(args=None):
+    print("IK Node: Starting main function...")
     rclpy.init(args=args)
+    print("IK Node: RCL initialized")
 
     node = rclpy.node.Node("ik_node")
+    print("IK Node: Node created")
     
     node.declare_parameter('eef_link_name', 'link_ree_teleop')
     node.declare_parameter('joint_names', [ 'joint_r1', 'joint_r2', 'joint_r3', 'joint_r4', 'joint_r5', 'joint_r6' ])
+    print("IK Node: Parameters declared")
 
     eef_link_name = node.get_parameter('eef_link_name').value
     joint_names = node.get_parameter('joint_names').value
+    print(f"IK Node: Got parameters - eef_link_name: {eef_link_name}, joint_names: {joint_names}")
     
     assert len(joint_names) == 6
 
     # Ref: interbotix_ros_toolboxes/interbotix_xs_toolbox/interbotix_xs_modules/interbotix_xs_modules/xs_robot/arm.py
     urdf_name = str(Path(get_package_share_directory("astra_description")) / "urdf" / "astra_description_rel.urdf")
-    logger.info(f'Loading URDF from: {urdf_name}')
-
-    M, Slist, Blist, Mlist, Glist, robot = loadURDF(
-        urdf_name, 
-        eef_link_name=eef_link_name, 
-        actuated_joint_names=joint_names
-    )
+    logger.info(f'Original URDF path: {urdf_name}')
+    print(f"IK Node: URDF path: {urdf_name}")
     
-    logger.info(f'Robot loaded successfully. End effector: {eef_link_name}')
-    logger.info(f'Joint names: {joint_names}')
-    logger.info(f'M matrix:\n{M}')
-    logger.info(f'Slist:\n{Slist}')
+    # Check if URDF file exists
+    if not os.path.exists(urdf_name):
+        logger.error(f'URDF file not found: {urdf_name}')
+        print(f"IK Node: ERROR - URDF file not found: {urdf_name}")
+        node.destroy_node()
+        rclpy.shutdown()
+        return
+    
+    print("IK Node: URDF file exists, starting loadURDF...")
+    
+    try:
+        logger.info(f'Loading URDF from: {urdf_name}')
+        print("IK Node: About to call loadURDF...")
+        
+        M, Slist, Blist, Mlist, Glist, robot = loadURDF(
+            urdf_name, 
+            eef_link_name=eef_link_name, 
+            actuated_joint_names=joint_names
+        )
+        
+        print("IK Node: loadURDF completed successfully!")
+        logger.info(f'Robot loaded successfully. End effector: {eef_link_name}')
+        logger.info(f'Joint names: {joint_names}')
+        logger.info(f'M matrix:\n{M}')
+        logger.info(f'Slist shape: {Slist.shape}')
+        logger.info(f'Slist:\n{Slist}')
+        
+    except Exception as e:
+        logger.error(f'Failed to load URDF: {e}')
+        print(f"IK Node: ERROR loading URDF: {e}")
+        import traceback
+        logger.error(f'Traceback: {traceback.format_exc()}')
+        print(f"IK Node: Traceback: {traceback.format_exc()}")
+        node.destroy_node()
+        rclpy.shutdown()
+        return
+    
+    print("IK Node: Starting joint limit extraction...")
     logger.info(f'IK node started and listening for goal_pose messages')
     
     joint_limit_lower = []
     joint_limit_upper = []
     for joint_name in joint_names:
-        joint = robot.joint_map[joint_name]
-        joint_limit_lower.append(joint.limit.lower)
-        joint_limit_upper.append(joint.limit.upper)
-        logger.info(f'Joint {joint_name}: limits [{joint.limit.lower}, {joint.limit.upper}]')
+        if joint_name in robot.joint_map:
+            joint = robot.joint_map[joint_name]
+            joint_limit_lower.append(joint.limit.lower)
+            joint_limit_upper.append(joint.limit.upper)
+            logger.info(f'Joint {joint_name}: limits [{joint.limit.lower}, {joint.limit.upper}]')
+        else:
+            logger.error(f'Joint {joint_name} not found in robot model!')
+            logger.info(f'Available joints: {list(robot.joint_map.keys())}')
+            node.destroy_node()
+            rclpy.shutdown()
+            return
 
     arm_joint_command_publisher = node.create_publisher(astra_controller_interfaces.msg.JointCommand, "arm/joint_command", 10)
     lift_joint_command_publisher = node.create_publisher(astra_controller_interfaces.msg.JointCommand, "lift/joint_command", 10)
@@ -198,13 +241,13 @@ def main(args=None):
         set_ee_pose_matrix(pt.transform_from_pq(np.array(pq_from_ros_pose(msg.pose))))
     node.create_subscription(geometry_msgs.msg.PoseStamped, "goal_pose", cb, rclpy.qos.qos_profile_sensor_data)
 
-    rclpy.spin(node)
-
-    # Destroy the node explicitly
-    # (optional - otherwise it will be done automatically
-    # when the garbage collector destroys the node object)
-    node.destroy_node()
-    rclpy.shutdown()
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        logger.info("Shutting down IK node...")
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == '__main__':
     main()
