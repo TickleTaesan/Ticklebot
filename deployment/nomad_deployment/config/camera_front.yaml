@@ -1,0 +1,7 @@
+camera:
+  ros__parameters:
+    image_size: [640, 480]
+    device: /dev/video0
+    fps: 30
+
+

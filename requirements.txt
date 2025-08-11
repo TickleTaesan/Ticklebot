@@ -1,6 +1,7 @@
-# NoMaD Model Dependencies for Jetson Orin Nano (JetPack 6.2)
+# NoMaD Runtime Dependencies for Jetson Orin Nano (JetPack 6.2, Python 3.10)
 # GPU-independent packages only
-# PyTorch and CUDA should be installed separately via NVIDIA JetPack
+# IMPORTANT: PyTorch/torchvision and any torch-dependent libs are NOT installed here.
+#            Install PyTorch first (Jetson method), then install extras from requirements-torch-extras.txt
 
 # Core ML dependencies
 numpy==1.24.3
@@ -8,18 +9,17 @@ matplotlib==3.7.1
 pyyaml==6.0.1
 pillow==10.0.0
 tqdm==4.65.0
-opencv-python==4.8.0.76
+# On Jetson (aarch64), prefer system OpenCV (python3-opencv). Skip pip wheel on aarch64
+opencv-python==4.8.0.76; platform_machine != "aarch64"
 h5py==3.8.0
+pyserial==3.5
 
-# NoMaD specific dependencies
+# NoMaD specific (torch-agnostic here)
 diffusers==0.11.1
-efficientnet-pytorch==0.7.1
 warmup-scheduler==0.3
 
 # Vision and attention models
 einops==0.6.1
-vit-pytorch==1.1.*
-timm==0.9.2
 transformers==4.21.3
 
 # Additional utilities
@@ -31,4 +31,3 @@ networkx==3.1
 
 # Optional: For development and debugging
 ipython==8.12.3
-jupyter==1.0.0
