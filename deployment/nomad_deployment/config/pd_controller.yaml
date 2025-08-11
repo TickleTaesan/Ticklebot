@@ -1,0 +1,25 @@
+pd_controller:
+  ros__parameters:
+    # Motion limits and rate
+    max_v: 0.4            # m/s
+    max_w: 0.8            # rad/s
+    frame_rate: 9         # Hz
+
+    # Topics
+    waypoint_topic: /waypoint
+    vel_topic: /cmd_vel/nav
+    reached_goal_topic: /topoplan/reached_goal
+
+    # Differential drive geometry
+    wheel_separation: 0.26  # meters
+    wheel_radius: 0.069      # meters
+
+    # Motor driver (ODESC) serial
+    use_serial: false
+    serial_port: /dev/ttyUSB0
+    baudrate: 115200
+
+    # Waypoint timeout (s)
+    waypoint_timeout: 1.0
+
+
