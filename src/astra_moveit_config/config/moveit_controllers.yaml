@@ -20,16 +20,13 @@ moveit_simple_controller_manager:
       - joint_r4
       - joint_r5
       - joint_r6
-    action_ns: follow_joint_trajectory
-    default: true
+
   astra_right_hand_controller:
     type: FollowJointTrajectory
     action_ns: follow_joint_trajectory
     default: true
     joints:
       - joint_r7r
-    action_ns: follow_joint_trajectory
-    default: true
 
   astra_left_arm_controller:
     type: FollowJointTrajectory
@@ -42,8 +39,6 @@ moveit_simple_controller_manager:
       - joint_l4
       - joint_l5
       - joint_l6
-    action_ns: follow_joint_trajectory
-    default: true
 
   astra_left_hand_controller:
     type: FollowJointTrajectory
@@ -51,5 +46,3 @@ moveit_simple_controller_manager:
     default: true
     joints:
       - joint_l7l
-    action_ns: follow_joint_trajectory
-    default: true

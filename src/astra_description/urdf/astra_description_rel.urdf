@@ -679,8 +679,6 @@
       link="link_l6" />
     <child
       link="link_lee" />
-    <axis
-      xyz="0 0 0" />
   </joint>
   <link
     name="link_lee_teleop">
@@ -715,8 +713,6 @@
       link="link_l6" />
     <child
       link="link_lee_teleop" />
-    <axis
-      xyz="0 0 0" />
   </joint>
   <link
     name="link_head_pan">
