@@ -1,5 +1,5 @@
-# Use Ubuntu 22.04 as the base image
-FROM ubuntu:22.04
+# Jetson Orin Nano (JetPack 6.2 / L4T r36.x) friendly base with CUDA+PyTorch aarch64 preinstalled
+FROM nvcr.io/nvidia/l4t-pytorch:r36.2.0-pth2.3-py3
 
 # Avoid prompts from apt
 ENV DEBIAN_FRONTEND=noninteractive
@@ -18,6 +18,7 @@ RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/r
 # Install ROS2 Humble
 RUN apt-get update && apt-get install -y \
     ros-humble-desktop \
+    ros-humble-cv-bridge \
     python3-colcon-common-extensions \
     python3-rosdep \
     python3-argcomplete
@@ -43,17 +44,17 @@ RUN echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?> \
 ENV FASTRTPS_DEFAULT_PROFILES_FILE=/fastrtps_disable_shm.xml
 
 # Initialize rosdep
-RUN rosdep init && rosdep update
+RUN rosdep init && rosdep update || true
 
 # Install git and python3-pip
 RUN apt-get install -y git python3-pip
-RUN pip3 install gdown
 
 # Install Poetry
 RUN pip3 install poetry
 
-# Clone the VisualNav-Transformer repository
-RUN git clone https://github.com/Robotecai/visualnav-transformer-ros2.git /visualnav-transformer
+# Use local workspace instead of cloning a remote repo
+WORKDIR /visualnav-transformer
+COPY . /visualnav-transformer
 
 # Set up environment variables
 RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
@@ -62,14 +63,10 @@ RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Set the working directory
-WORKDIR /visualnav-transformer
-
-# Install dependencies using Poetry
-RUN poetry install --no-interaction --no-ansi
-
-RUN mkdir /visualnav-transformer/model_weights
-RUN gdown https://drive.google.com/uc?id=1YJhkkMJAYOiKNyCaelbS_alpUpAJsOUb -O /visualnav-transformer/model_weights/nomad.pth
+# Install dependencies using Poetry (reuse system torch from base image)
+RUN poetry config virtualenvs.create false \
+ && pip3 install --upgrade pip \
+ && poetry install --no-interaction --no-ansi
 
 # Set the entrypoint
 ENTRYPOINT ["/bin/bash"]

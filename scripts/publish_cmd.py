@@ -9,6 +9,7 @@ from rclpy.node import Node
 from std_msgs.msg import Float32MultiArray
 
 from visualnav_transformer.deployment.src.topic_names import WAYPOINT_TOPIC
+from visualnav_transformer.deployment.src.utils import clip_angle
 
 # CONSTS
 CONFIG_PATH = "config/robot.yaml"
@@ -58,7 +59,7 @@ class VelPublisher(Node):
         )
 
         # Publisher
-        self.publisher = self.create_publisher(Twist, "/cmd_vel", 10)
+        self.publisher = self.create_publisher(Twist, VEL_TOPIC, 10)
 
         self.bridge = CvBridge()
         self.latest_image = None
