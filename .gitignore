@@ -7,7 +7,6 @@ train/gnm_dataset/*
 
 *.png
 *.jpg
-*.pth
 *.mp4
 *.gif
 
