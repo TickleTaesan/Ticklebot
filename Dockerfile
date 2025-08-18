@@ -1,5 +1,5 @@
-# Jetson Orin Nano (JetPack 6.2 / L4T r36.x) friendly base with CUDA+PyTorch aarch64 preinstalled
-FROM nvcr.io/nvidia/l4t-pytorch:r36.2.0-pth2.3-py3
+# Jetson Orin Nano (JetPack 6.2.1 / L4T r36.4.4) friendly base with CUDA+PyTorch aarch64 preinstalled
+FROM nvcr.io/nvidia/l4t-pytorch:r36.4.4-pth2.3-py3
 
 # Avoid prompts from apt
 ENV DEBIAN_FRONTEND=noninteractive

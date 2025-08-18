@@ -10,6 +10,18 @@ vel_teleop_topic: /cmd_vel_mux/input/teleop
 vel_navi_topic: /cmd_vel
 vel_recovery_topic: /cmd_vel_mux/input/recovery
 
-# optional robot geometry (for reference; not used directly by ROS2 publisher)
-wheel_separation: 0.26 # m
-wheel_radius: 0.069 # m
+wheel_radius: 0.069          # [m] 실제 측정값
+wheel_separation: 0.26       # [m] 실제 측정값
+gear_ratio: 1.0              # 감속기 없으면 1.0
+uart_port: "/dev/ttyUSB0"    # Jetson에서 확인
+uart_baud: 115200
+
+left_motor_index: 0
+right_motor_index: 1
+invert_left: false           # 양수=전진이면 false
+invert_right: false
+
+motor_max_turns: 20.0        # 모터축 [turn/s]
+watchdog_timeout: 0.5        # [s] /cmd_vel 끊기면 자동 정지
+
+
