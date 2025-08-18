@@ -1,0 +1,68 @@
+(lerobot-ros) dong@ubuntu:~/robotcontest/lerobot-ros$ ls
+build  install  lerobot_ros  log  pyproject.toml  README.md  scripts
+(lerobot-ros) dong@ubuntu:~/robotcontest/lerobot-ros$ ib
+install/local_setup.bash loaded!
+(lerobot-ros) dong@ubuntu:~/robotcontest/lerobot-ros$ 
+(lerobot-ros) dong@ubuntu:~/robotcontest/lerobot-ros$ 
+(lerobot-ros) dong@ubuntu:~/robotcontest/lerobot-ros$ 
+(lerobot-ros) dong@ubuntu:~/robotcontest/lerobot-ros$ 
+(lerobot-ros) dong@ubuntu:~/robotcontest/lerobot-ros$ 
+(lerobot-ros) dong@ubuntu:~/robotcontest/lerobot-ros$ 
+(lerobot-ros) dong@ubuntu:~/robotcontest/lerobot-ros$ python scripts/teleoperate.py \
+  --robot.type=so101_ros \
+  --robot.id=my_awesome_follower_arm \
+  --teleop.type=gamepad_6dof \
+  --teleop.id=my_awesome_leader_arm \
+  --display_data=true
+INFO 2025-08-18 11:26:49 eoperate.py:135 {'display_data': True,
+ 'fps': 60,
+ 'robot': {'action_type': <ActionType.JOINT_TRAJECTORY: 'joint_trajectory'>,
+           'calibration_dir': None,
+           'cameras': {},
+           'id': 'my_awesome_follower_arm',
+           'max_relative_target': None,
+           'ros2_interface': {'arm_joint_names': ['1', '2', '3', '4', '5'],
+                              'base_link': 'base',
+                              'gripper_action_type': <GripperActionType.TRAJECTORY: 'trajectory'>,
+                              'gripper_close_position': 0.0,
+                              'gripper_joint_name': '6',
+                              'gripper_open_position': 1.74533,
+                              'max_angular_velocity': 0.25,
+                              'max_joint_positions': [1.91986,
+                                                      1.74533,
+                                                      1.5708,
+                                                      1.65806,
+                                                      2.79253],
+                              'max_linear_velocity': 0.1,
+                              'min_joint_positions': [-1.91986,
+                                                      -1.74533,
+                                                      -1.74533,
+                                                      -1.65806,
+                                                      -2.79253],
+                              'namespace': ''}},
+ 'teleop': {'calibration_dir': None,
+            'id': 'my_awesome_leader_arm',
+            'use_gripper': True},
+ 'teleop_time_s': None}
+[2025-08-18T02:26:49Z INFO  winit::platform_impl::linux::x11::window] Guessed window scale factor: 1
+ERROR 2025-08-18 11:26:49 dof_utils.py:23 No gamepad detected. Please connect a gamepad and try again.
+2025-08-18 11:26:49.662 [RTPS_TRANSPORT_SHM Error] Failed init_port fastrtps_port7411: open_and_lock_file failed -> Function open_port_internal
+[2025-08-18T02:26:49Z WARN  wgpu_hal::vulkan::instance] Unable to find extension: VK_EXT_swapchain_colorspace
+libEGL warning: DRI2: failed to authenticate
+INFO 2025-08-18 11:26:52 bots/ros.py:183 my_awesome_follower_arm ROS2Robot disconnected.
+Traceback (most recent call last):
+  File "/home/dong/robotcontest/lerobot-ros/scripts/teleoperate.py", line 43, in <module>
+    lr_tel.teleoperate()  # type: ignore
+  File "/home/dong/miniconda3/envs/lerobot-ros/lib/python3.10/site-packages/draccus/argparsing.py", line 225, in wrapper_inner
+    response = fn(cfg, *args, **kwargs)
+  File "/home/dong/robotcontest/lerobot/src/lerobot/teleoperate.py", line 146, in teleoperate
+    teleop_loop(teleop, robot, cfg.fps, display_data=cfg.display_data, duration=cfg.teleop_time_s)
+  File "/home/dong/robotcontest/lerobot/src/lerobot/teleoperate.py", line 109, in teleop_loop
+    action = teleop.get_action()
+  File "/home/dong/robotcontest/lerobot-ros/lerobot_ros/teleoperators/gamepad_6dof.py", line 77, in get_action
+    delta_x, delta_y, delta_z, delta_roll, delta_pitch, delta_yaw = self.gamepad.get_6dof_deltas()
+  File "/home/dong/robotcontest/lerobot-ros/lerobot_ros/teleoperators/gamepad_6dof_utils.py", line 74, in get_6dof_deltas
+    raise RuntimeError("Gamepad not initialized. Call start() first.")
+RuntimeError: Gamepad not initialized. Call start() first.
+(lerobot-ros) dong@ubuntu:~/robotcontest/lerobot-ros$ 
+

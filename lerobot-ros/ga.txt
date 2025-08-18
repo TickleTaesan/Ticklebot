@@ -1,0 +1,40 @@
+dong@ubuntu:~/robotcontest/lerobot_ws$ ib
+install/local_setup.bash loaded!
+dong@ubuntu:~/robotcontest/lerobot_ws$ ros2 launch lerobot_description so101_gazebo.launch.py
+[INFO] [launch]: All log files can be found below /home/dong/.ros/log/2025-08-18-13-07-49-451036-ubuntu-58927
+[INFO] [launch]: Default logging verbosity is set to INFO
+^C[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+dong@ubuntu:~/robotcontest/lerobot_ws$ ^C
+dong@ubuntu:~/robotcontest/lerobot_ws$ lero
+^[[A^[[A(lerobot-ros) dong@ubuntu:~/robotcontest/lerobot_ws$ ros2 launch lerobot_description so101_gazebo.launch.py
+[INFO] [launch]: All log files can be found below /home/dong/.ros/log/2025-08-18-13-07-55-872084-ubuntu-58997
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [robot_state_publisher-1]: process started with pid [58999]
+[INFO] [ign gazebo-2]: process started with pid [59001]
+[INFO] [create-3]: process started with pid [59004]
+[INFO] [parameter_bridge-4]: process started with pid [59006]
+[create-3] [INFO] [1755490076.837936743] [ros_gz_sim]: Requesting list of world names.
+[robot_state_publisher-1] [INFO] [1755490076.881477969] [robot_state_publisher]: got segment base
+[robot_state_publisher-1] [INFO] [1755490076.881711679] [robot_state_publisher]: got segment gripper
+[robot_state_publisher-1] [INFO] [1755490076.881735168] [robot_state_publisher]: got segment jaw
+[robot_state_publisher-1] [INFO] [1755490076.881746497] [robot_state_publisher]: got segment lower_arm
+[robot_state_publisher-1] [INFO] [1755490076.881755137] [robot_state_publisher]: got segment shoulder
+[robot_state_publisher-1] [INFO] [1755490076.881762594] [robot_state_publisher]: got segment upper_arm
+[robot_state_publisher-1] [INFO] [1755490076.881770594] [robot_state_publisher]: got segment world
+[robot_state_publisher-1] [INFO] [1755490076.881777635] [robot_state_publisher]: got segment wrist
+[parameter_bridge-4] [INFO] [1755490076.883101330] [ros_gz_bridge]: Creating GZ->ROS Bridge: [/clock (gz.msgs.Clock) -> /clock (rosgraph_msgs/msg/Clock)] (Lazy 0)
+[create-3] [INFO] [1755490081.838746200] [ros_gz_sim]: Requesting list of world names.
+[create-3] [INFO] [1755490086.839346888] [ros_gz_sim]: Requesting list of world names.
+[ign gazebo-2] [Wrn] [Gui.cc:261] Waited for 10s for a subscriber to [/gazebo/starting_world] and got none.
+[ign gazebo-2] [GUI] [Wrn] [Application.cc:797] [QT] qrc:/qml/StyleDialog.qml:112:3: QML Connections: Implicitly defined onFoo properties in Connections are deprecated. Use this syntax instead: function onFoo(<arguments>) { ... }
+[ign gazebo-2] [GUI] [Wrn] [Application.cc:797] [QT] qrc:/qml/StyleDialog.qml:105:3: QML Connections: Implicitly defined onFoo properties in Connections are deprecated. Use this syntax instead: function onFoo(<arguments>) { ... }
+[ign gazebo-2] [GUI] [Wrn] [Application.cc:797] [QT] qrc:/qml/StyleDialog.qml:98:3: QML Connections: Implicitly defined onFoo properties in Connections are deprecated. Use this syntax instead: function onFoo(<arguments>) { ... }
+[ign gazebo-2] [GUI] [Wrn] [Application.cc:797] [QT] qrc:qml/Main.qml:102:3: QML Connections: Implicitly defined onFoo properties in Connections are deprecated. Use this syntax instead: function onFoo(<arguments>) { ... }
+[ign gazebo-2] [GUI] [Wrn] [Application.cc:797] [QT] qrc:/qml/PluginMenu.qml:27:3: QML Connections: Implicitly defined onFoo properties in Connections are deprecated. Use this syntax instead: function onFoo(<arguments>) { ... }
+[ign gazebo-2] [GUI] [Wrn] [Application.cc:797] [QT] file::/Gazebo/GazeboDrawer.qml:242:3: QML Connections: Implicitly defined onFoo properties in Connections are deprecated. Use this syntax instead: function onFoo(<arguments>) { ... }
+[create-3] [INFO] [1755490091.839949192] [ros_gz_sim]: Requesting list of world names.
+[create-3] [INFO] [1755490096.840511677] [ros_gz_sim]: Requesting list of world names.
+[create-3] [INFO] [1755490101.841065583] [ros_gz_sim]: Requesting list of world names.
+[create-3] [INFO] [1755490106.841566883] [ros_gz_sim]: Requesting list of world names.
+[create-3] [INFO] [1755490111.842211817] [ros_gz_sim]: Requesting list of world names.
+

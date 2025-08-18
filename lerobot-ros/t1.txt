@@ -1,0 +1,23 @@
+WARNING 2025-08-18 12:57:25 eit_servo.py:99 Dropping servo command because MoveIt2 Servo is not enabled.
+WARNING 2025-08-18 12:57:26 eit_servo.py:68 Pause service not available.
+WARNING 2025-08-18 12:57:26 eit_servo.py:99 Dropping servo command because MoveIt2 Servo is not enabled.
+WARNING 2025-08-18 12:57:27 eit_servo.py:68 Pause service not available.
+WARNING 2025-08-18 12:57:27 eit_servo.py:99 Dropping servo command because MoveIt2 Servo is not enabled.
+WARNING 2025-08-18 12:57:28 eit_servo.py:68 Pause service not available.
+WARNING 2025-08-18 12:57:28 eit_servo.py:99 Dropping servo command because MoveIt2 Servo is not enabled.
+WARNING 2025-08-18 12:57:29 eit_servo.py:68 Pause service not available.
+WARNING 2025-08-18 12:57:29 eit_servo.py:99 Dropping servo command because MoveIt2 Servo is not enabled.
+WARNING 2025-08-18 12:57:30 eit_servo.py:68 Pause service not available.
+WARNING 2025-08-18 12:57:30 eit_servo.py:99 Dropping servo command because MoveIt2 Servo is not enabled.
+WARNING 2025-08-18 12:57:31 eit_servo.py:68 Pause service not available.
+WARNING 2025-08-18 12:57:31 eit_servo.py:99 Dropping servo command because MoveIt2 Servo is not enabled.
+WARNING 2025-08-18 12:57:32 eit_servo.py:68 Pause service not available.
+WARNING 2025-08-18 12:57:32 eit_servo.py:99 Dropping servo command because MoveIt2 Servo is not enabled.
+WARNING 2025-08-18 12:57:33 eit_servo.py:68 Pause service not available.
+WARNING 2025-08-18 12:57:33 eit_servo.py:99 Dropping servo command because MoveIt2 Servo is not enabled.
+WARNING 2025-08-18 12:57:34 eit_servo.py:68 Pause service not available.
+WARNING 2025-08-18 12:57:34 eit_servo.py:99 Dropping servo command because MoveIt2 Servo is not enabled.
+WARNING 2025-08-18 12:57:35 eit_servo.py:68 Pause service not available.
+WARNING 2025-08-18 12:57:35 eit_servo.py:99 Dropping servo command because MoveIt2 Servo is not enabled.
+^CException in thread Thread-1 (spin):
+

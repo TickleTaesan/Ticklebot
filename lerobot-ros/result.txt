@@ -1,0 +1,260 @@
+[37;1m2025-08-18 12:57:10.552 [31;1m[[37;1mRTPS_TRANSPORT_SHM[31;1m Error] [37mFailed init_port fastrtps_port7411: open_and_lock_file failed[34;1m -> Function [36mopen_port_internal[m
+6DOF Gamepad controls:
+  Left analog stick: Linear X/Y movement
+  Right analog stick: Angular X/Y rotation (roll/pitch)
+  LB/RB bumpers: Angular Z rotation (yaw)
+  LT/RT triggers: Linear Z movement (up/down)
+  A/X button: Gripper control (open by default, close when pressed)
+
+-----------------------
+NAME          |    NORM
+linear_x.vel  |    0.00
+linear_y.vel  |   -0.78
+linear_z.vel  |    0.00
+angular_x.vel |    0.00
+angular_y.vel |    0.00
+angular_z.vel |    0.00
+gripper.pos   |    0.00
+
+time: 1021.81ms (1 Hz)
+[12A
+-----------------------
+NAME          |    NORM
+linear_x.vel  |    0.00
+linear_y.vel  |    0.00
+linear_z.vel  |    0.00
+angular_x.vel |    0.00
+angular_y.vel |    0.00
+angular_z.vel |    0.00
+gripper.pos   |    0.00
+
+time: 1005.27ms (1 Hz)
+[12A
+-----------------------
+NAME          |    NORM
+linear_x.vel  |    0.00
+linear_y.vel  |    0.00
+linear_z.vel  |    0.00
+angular_x.vel |    0.00
+angular_y.vel |    0.00
+angular_z.vel |    0.00
+gripper.pos   |    0.00
+
+time: 1006.21ms (1 Hz)
+[12A
+-----------------------
+NAME          |    NORM
+linear_x.vel  |    0.00
+linear_y.vel  |    0.00
+linear_z.vel  |    0.00
+angular_x.vel |    0.00
+angular_y.vel |    0.00
+angular_z.vel |    0.00
+gripper.pos   |    0.00
+
+time: 1004.67ms (1 Hz)
+[12A
+-----------------------
+NAME          |    NORM
+linear_x.vel  |    0.00
+linear_y.vel  |    0.00
+linear_z.vel  |    0.00
+angular_x.vel |    0.00
+angular_y.vel |    0.00
+angular_z.vel |    0.00
+gripper.pos   |    0.00
+
+time: 1004.75ms (1 Hz)
+[12A
+-----------------------
+NAME          |    NORM
+linear_x.vel  |    0.00
+linear_y.vel  |    0.00
+linear_z.vel  |    0.00
+angular_x.vel |    0.00
+angular_y.vel |    0.00
+angular_z.vel |    0.00
+gripper.pos   |    0.00
+
+time: 1013.66ms (1 Hz)
+[12A
+-----------------------
+NAME          |    NORM
+linear_x.vel  |    0.00
+linear_y.vel  |    0.00
+linear_z.vel  |    0.00
+angular_x.vel |    0.00
+angular_y.vel |    0.00
+angular_z.vel |    0.00
+gripper.pos   |    0.00
+
+time: 1004.91ms (1 Hz)
+[12A
+-----------------------
+NAME          |    NORM
+linear_x.vel  |    0.00
+linear_y.vel  |    0.00
+linear_z.vel  |    0.00
+angular_x.vel |    0.00
+angular_y.vel |    0.00
+angular_z.vel |    0.00
+gripper.pos   |    0.00
+
+time: 1004.80ms (1 Hz)
+[12A
+-----------------------
+NAME          |    NORM
+linear_x.vel  |    0.00
+linear_y.vel  |    0.00
+linear_z.vel  |    0.00
+angular_x.vel |    0.00
+angular_y.vel |    0.00
+angular_z.vel |    0.00
+gripper.pos   |    0.00
+
+time: 1005.26ms (1 Hz)
+[12A
+-----------------------
+NAME          |    NORM
+linear_x.vel  |    0.00
+linear_y.vel  |    0.00
+linear_z.vel  |    0.00
+angular_x.vel |    0.00
+angular_y.vel |    0.00
+angular_z.vel |    0.00
+gripper.pos   |    0.00
+
+time: 1005.35ms (1 Hz)
+[12A
+-----------------------
+NAME          |    NORM
+linear_x.vel  |    0.00
+linear_y.vel  |    0.00
+linear_z.vel  |    0.00
+angular_x.vel |    0.00
+angular_y.vel |    0.00
+angular_z.vel |    0.00
+gripper.pos   |    0.00
+
+time: 1005.91ms (1 Hz)
+[12A
+-----------------------
+NAME          |    NORM
+linear_x.vel  |    0.00
+linear_y.vel  |    0.00
+linear_z.vel  |    0.00
+angular_x.vel |    0.00
+angular_y.vel |    0.00
+angular_z.vel |    0.00
+gripper.pos   |    0.00
+
+time: 1005.17ms (1 Hz)
+[12A
+-----------------------
+NAME          |    NORM
+linear_x.vel  |    0.00
+linear_y.vel  |    0.00
+linear_z.vel  |    0.00
+angular_x.vel |    0.00
+angular_y.vel |    0.00
+angular_z.vel |    0.00
+gripper.pos   |    0.00
+
+time: 1005.13ms (1 Hz)
+[12A
+-----------------------
+NAME          |    NORM
+linear_x.vel  |    0.00
+linear_y.vel  |    0.00
+linear_z.vel  |    0.00
+angular_x.vel |    0.00
+angular_y.vel |    0.00
+angular_z.vel |    0.00
+gripper.pos   |    0.00
+
+time: 1005.42ms (1 Hz)
+[12A
+-----------------------
+NAME          |    NORM
+linear_x.vel  |    0.00
+linear_y.vel  |    0.00
+linear_z.vel  |    0.00
+angular_x.vel |    0.00
+angular_y.vel |    0.00
+angular_z.vel |    0.00
+gripper.pos   |    0.00
+
+time: 1005.49ms (1 Hz)
+[12A
+-----------------------
+NAME          |    NORM
+linear_x.vel  |    0.00
+linear_y.vel  |    0.00
+linear_z.vel  |    0.00
+angular_x.vel |    0.00
+angular_y.vel |    0.00
+angular_z.vel |    0.00
+gripper.pos   |    0.00
+
+time: 1004.86ms (1 Hz)
+[12A
+-----------------------
+NAME          |    NORM
+linear_x.vel  |    0.00
+linear_y.vel  |    0.00
+linear_z.vel  |    0.00
+angular_x.vel |    0.00
+angular_y.vel |    0.00
+angular_z.vel |    0.00
+gripper.pos   |    0.00
+
+time: 1005.34ms (1 Hz)
+[12A
+-----------------------
+NAME          |    NORM
+linear_x.vel  |    0.00
+linear_y.vel  |    0.00
+linear_z.vel  |    0.00
+angular_x.vel |    0.00
+angular_y.vel |    0.00
+angular_z.vel |    0.00
+gripper.pos   |    0.00
+
+time: 1005.34ms (1 Hz)
+[12A
+-----------------------
+NAME          |    NORM
+linear_x.vel  |    0.00
+linear_y.vel  |    0.00
+linear_z.vel  |    0.00
+angular_x.vel |    0.00
+angular_y.vel |    0.00
+angular_z.vel |    0.00
+gripper.pos   |    0.00
+
+time: 1005.07ms (1 Hz)
+[12A
+-----------------------
+NAME          |    NORM
+linear_x.vel  |    0.00
+linear_y.vel  |    0.00
+linear_z.vel  |    0.00
+angular_x.vel |    0.00
+angular_y.vel |    0.00
+angular_z.vel |    0.00
+gripper.pos   |    0.00
+
+time: 1008.02ms (1 Hz)
+[12A
+-----------------------
+NAME          |    NORM
+linear_x.vel  |    0.00
+linear_y.vel  |    0.00
+linear_z.vel  |    0.00
+angular_x.vel |    0.00
+angular_y.vel |    0.00
+angular_z.vel |    0.00
+gripper.pos   |    0.00
+
+time: 1006.22ms (1 Hz)
+[12A
