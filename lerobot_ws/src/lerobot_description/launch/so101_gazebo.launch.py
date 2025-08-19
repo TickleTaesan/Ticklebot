@@ -21,7 +21,7 @@ def generate_launch_description():
     )
 
     gazebo_resource_path = SetEnvironmentVariable(
-        name="GZ_SIM_RESOURCE_PATH",
+        name="IGN_GAZEBO_RESOURCE_PATH",
         value=[
             str(Path(lerobot_description).parent.resolve())
             ]
@@ -43,26 +43,26 @@ def generate_launch_description():
 
     gazebo = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
-                    get_package_share_directory("ros_gz_sim"), "launch"), "/gz_sim.launch.py"]),
+                    get_package_share_directory("ros_ign_gazebo"), "launch"), "/ign_gazebo.launch.py"]),
                 launch_arguments=[
-                    ("gz_args", [" -v 4 -r empty.sdf "]
+                    ("ign_args", [" -v 4 -r empty.sdf "]
                     )
                 ]
              )
 
-    gz_spawn_entity = Node(
-        package="ros_gz_sim",
+    ign_spawn_entity = Node(
+        package="ros_ign_gazebo",
         executable="create",
         output="screen",
         arguments=["-topic", "robot_description",
                    "-name", "so101"],
     )
 
-    gz_ros2_bridge = Node(
-        package="ros_gz_bridge",
+    ign_ros2_bridge = Node(
+        package="ros_ign_bridge",
         executable="parameter_bridge",
         arguments=[
-            "/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock",
+            "/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock",
         ]
     )
 
@@ -71,6 +71,6 @@ def generate_launch_description():
         gazebo_resource_path,
         robot_state_publisher_node,
         gazebo,
-        gz_spawn_entity,
-        gz_ros2_bridge
+        ign_spawn_entity,
+        ign_ros2_bridge
     ])

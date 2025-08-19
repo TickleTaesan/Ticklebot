@@ -1,12 +1,12 @@
 # ROS 2 Package for LeRobot SO-ARM101
 
-LeRobot SO-ARM101 integrated into ROS 2 Jazzy.
+LeRobot SO-ARM101 integrated into ROS 2 Humble with Gazebo Fortress.
 
 ## Features
 
-- ✅ ROS 2 Jazzy compatibility
+- ✅ ROS 2 Humble compatibility
 - ✅ Rviz visualization
-- ✅ Gazebo Harmonic simulation
+- ✅ Gazebo Fortress simulation (using ign gazebo)
 - ✅ ROS 2 Control integration
 - ✅ MoveIt 2 motion planning
 - 📝 **TODO:** ROS 2 control interface for the real HW
@@ -39,13 +39,13 @@ Clone this repository and install dependencies using [rosdep](https://docs.ros.o
 
 **Video:**  
 <!-- Add your video link here -->
-https://github.com/user-attachments/assets/98f0a867-46c5-4661-8308-5de9e60a960b
+https://github.com/user-attachments/assets/98f0a867-46c5-4661-8308-00de9e60a960b
 
 ---
 
 ## Gazebo and ROS 2 Control
 
-**Summary:** Gazebo and ROS 2 Control: Control the gripper
+**Summary:** Gazebo Fortress and ROS 2 Control: Control the gripper
 
 **Commands:**  
 `ros2 launch lerobot_description so101_gazebo.launch.py`  
@@ -62,7 +62,7 @@ https://github.com/user-attachments/assets/7d82b15c-8276-43b1-9b73-00b3567a5cf7
 
 ## Gazebo, ROS 2 Control and MoveIt
 
-**Summary:** Gazebo, ROS 2 Control and MoveIt 2: MoveIt planner for the arm and gripper
+**Summary:** Gazebo Fortress, ROS 2 Control and MoveIt 2: MoveIt planner for the arm and gripper
 
 **Commands:**  
 `ros2 launch lerobot_description so101_gazebo.launch.py`  
@@ -76,12 +76,12 @@ https://github.com/user-attachments/assets/7d82b15c-8276-43b1-9b73-00b3567a5cf7
 <!-- Add your video link here -->
 
 
-https://github.com/user-attachments/assets/f95e9fd7-272a-46a1-8b34-0cb6c3f36da8
+https://github.com/user-attachments/assets/f95e9fd7-272a-46a1-9b34-00cb6c3f36da8
 
 **Video: Gripper**  
 <!-- Add your video link here -->
 
-https://github.com/user-attachments/assets/5511c329-faad-4020-9527-4034f54a027a
+https://github.com/user-attachments/assets/551c329-faad-4020-9527-4034f54a027a
 
 ---
 

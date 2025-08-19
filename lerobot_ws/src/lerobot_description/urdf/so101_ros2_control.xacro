@@ -2,9 +2,9 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
     <ros2_control name="RobotSystem" type="system">
-        <!-- ros2_control Gazebo -->
+        <!-- ros2_control Gazebo Fortress -->
         <hardware>
-            <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+            <plugin>ros_ign_control/GazeboSimSystem</plugin>
         </hardware>
 
         <joint name="1">
