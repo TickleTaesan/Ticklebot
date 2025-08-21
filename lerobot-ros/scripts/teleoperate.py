@@ -9,6 +9,10 @@ from lerobot_ros import (
     KeyboardJointTeleop,
     ROS2Config,
     ROS2Robot,
+    DualSO100RosConfig,
+    DualSO100RosRobot,
+    DualGamepadTeleop6DOFConfig,
+    DualGamepadTeleop6DOF,
 )
 
 # Override the default robot and teleoperator creation functions to use
@@ -20,14 +24,18 @@ orig_make_teleoperator_from_config = lr_tel.make_teleoperator_from_config
 
 def make_my_robot_from_config(config: RobotConfig) -> Robot:
     """Create a robot instance based on the provided configuration."""
-    if isinstance(config, ROS2Config):
+    if isinstance(config, DualSO100RosConfig):
+        return DualSO100RosRobot(config)
+    elif isinstance(config, ROS2Config):
         return ROS2Robot(config)
     return orig_make_robot_from_config(config)
 
 
 def make_my_teleoperator_from_config(config: TeleoperatorConfig) -> Teleoperator:
     """Create a teleoperator instance based on the provided configuration."""
-    if isinstance(config, GamepadTeleop6DOFConfig):
+    if isinstance(config, DualGamepadTeleop6DOFConfig):
+        return DualGamepadTeleop6DOF(config)
+    elif isinstance(config, GamepadTeleop6DOFConfig):
         return GamepadTeleop6DOF(config)
     elif isinstance(config, KeyboardJointConfig):
         return KeyboardJointTeleop(config)
