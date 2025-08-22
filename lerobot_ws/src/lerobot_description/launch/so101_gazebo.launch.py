@@ -14,48 +14,55 @@ from launch_ros.parameter_descriptions import ParameterValue
 def generate_launch_description():
     lerobot_description = get_package_share_directory("lerobot_description")
 
-    model_arg = DeclareLaunchArgument(name="model", default_value=os.path.join(
-                                        lerobot_description, "urdf", "so101.urdf.xacro"
-                                        ),
-                                      description="Absolute path to robot urdf file"
+    model_arg = DeclareLaunchArgument(
+        name="model",
+        default_value=os.path.join(
+            lerobot_description, "urdf", "so101.urdf.xacro"
+        ),
+        description="Absolute path to robot urdf file",
     )
 
     gazebo_resource_path = SetEnvironmentVariable(
         name="IGN_GAZEBO_RESOURCE_PATH",
-        value=[
-            str(Path(lerobot_description).parent.resolve())
-            ]
-        )
-    
-    robot_description = ParameterValue(Command([
+        value=[str(Path(lerobot_description).parent.resolve())],
+    )
+
+    robot_description = ParameterValue(
+        Command([
             "xacro ",
             LaunchConfiguration("model"),
         ]),
-        value_type=str
+        value_type=str,
     )
 
     robot_state_publisher_node = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
-        parameters=[{"robot_description": robot_description,
-                     "use_sim_time": True}]
+        parameters=[{
+            "robot_description": robot_description,
+            "use_sim_time": True,
+        }],
+        output="screen",
     )
 
     gazebo = IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([os.path.join(
-                    get_package_share_directory("ros_ign_gazebo"), "launch"), "/ign_gazebo.launch.py"]),
-                launch_arguments=[
-                    ("ign_args", [" -v 4 -r empty.sdf "]
-                    )
-                ]
-             )
+        PythonLaunchDescriptionSource([
+            os.path.join(get_package_share_directory("ros_ign_gazebo"), "launch"),
+            "/ign_gazebo.launch.py",
+        ]),
+        launch_arguments=[
+            ("ign_args", [" -v 4 -r empty.sdf "]),
+        ],
+    )
 
     ign_spawn_entity = Node(
         package="ros_ign_gazebo",
         executable="create",
         output="screen",
-        arguments=["-topic", "robot_description",
-                   "-name", "so101"],
+        arguments=[
+            "-topic", "robot_description",
+            "-name", "so101",
+        ],
     )
 
     ign_ros2_bridge = Node(
@@ -63,8 +70,13 @@ def generate_launch_description():
         executable="parameter_bridge",
         arguments=[
             "/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock",
-        ]
+        ],
+        output="screen",
     )
+
+    # Note: ros2_control는 Gazebo Fortress에서 ign_ros2_control 플러그인이 내부에서 구동합니다.
+    # 별도의 controller_manager 노드를 띄우지 않습니다.
+
 
     return LaunchDescription([
         model_arg,
@@ -72,5 +84,5 @@ def generate_launch_description():
         robot_state_publisher_node,
         gazebo,
         ign_spawn_entity,
-        ign_ros2_bridge
+        ign_ros2_bridge,
     ])

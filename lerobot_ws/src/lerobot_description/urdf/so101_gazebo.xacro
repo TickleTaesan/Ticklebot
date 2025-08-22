@@ -3,7 +3,7 @@
 
     <!-- ROS 2 Control -->
     <gazebo>
-        <plugin filename="libign_ros2_control-system.so" name="ign_ros2_control::IgnitionROS2ControlPlugin">
+        <plugin filename="libgz_ros2_control-system.so" name="ign_ros2_control::IgnitionROS2ControlPlugin">
             <parameters>$(find lerobot_controller)/config/so101_controllers.yaml</parameters>
         </plugin>
     </gazebo>

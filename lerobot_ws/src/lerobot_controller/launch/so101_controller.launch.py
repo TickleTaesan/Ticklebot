@@ -16,6 +16,11 @@ def generate_launch_description():
         default_value="True"
     )
 
+    hardware_plugin_arg = DeclareLaunchArgument(
+        "hardware_plugin",
+        default_value="ign_ros2_control/IgnitionSystem",
+    )
+
     is_sim = LaunchConfiguration("is_sim")
 
     robot_description = ParameterValue(
@@ -27,6 +32,9 @@ def generate_launch_description():
                     "urdf",
                     "so101.urdf.xacro",
                 ),
+                " ",
+                "hardware_plugin:=",
+                LaunchConfiguration("hardware_plugin"),
             ]
         ),
         value_type=str,
@@ -79,6 +87,7 @@ def generate_launch_description():
     return LaunchDescription(
         [
             is_sim_arg,
+            hardware_plugin_arg,
             robot_state_publisher_node,
             controller_manager,
             joint_state_broadcaster_spawner,

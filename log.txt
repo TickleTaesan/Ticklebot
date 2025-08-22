@@ -1,0 +1,42 @@
+kowook@kowook-950XEE:~$ ros2 pkg prefix feetech_ros2_driver
+dpkg -L ros-humble-feetech-ros2-driver | grep -Ei 'plugin|xml|share'
+grep -R "<base_class_type>hardware_interface::SystemInterface" "$(ros2 pkg prefix feetech_ros2_driver)"/share 2>/dev/null
+/opt/ros/humble
+/opt/ros/humble/share
+/opt/ros/humble/share/ament_index
+/opt/ros/humble/share/ament_index/resource_index
+/opt/ros/humble/share/ament_index/resource_index/hardware_interface__pluginlib__plugin
+/opt/ros/humble/share/ament_index/resource_index/hardware_interface__pluginlib__plugin/feetech_ros2_driver
+/opt/ros/humble/share/ament_index/resource_index/package_run_dependencies
+/opt/ros/humble/share/ament_index/resource_index/package_run_dependencies/feetech_ros2_driver
+/opt/ros/humble/share/ament_index/resource_index/packages
+/opt/ros/humble/share/ament_index/resource_index/packages/feetech_ros2_driver
+/opt/ros/humble/share/ament_index/resource_index/parent_prefix_path
+/opt/ros/humble/share/ament_index/resource_index/parent_prefix_path/feetech_ros2_driver
+/opt/ros/humble/share/feetech_ros2_driver
+/opt/ros/humble/share/feetech_ros2_driver/cmake
+/opt/ros/humble/share/feetech_ros2_driver/cmake/ament_cmake_export_dependencies-extras.cmake
+/opt/ros/humble/share/feetech_ros2_driver/cmake/ament_cmake_export_targets-extras.cmake
+/opt/ros/humble/share/feetech_ros2_driver/cmake/feetech_ros2_driverConfig-version.cmake
+/opt/ros/humble/share/feetech_ros2_driver/cmake/feetech_ros2_driverConfig.cmake
+/opt/ros/humble/share/feetech_ros2_driver/cmake/feetech_ros2_driverTargetsExport-none.cmake
+/opt/ros/humble/share/feetech_ros2_driver/cmake/feetech_ros2_driverTargetsExport.cmake
+/opt/ros/humble/share/feetech_ros2_driver/environment
+/opt/ros/humble/share/feetech_ros2_driver/environment/ament_prefix_path.dsv
+/opt/ros/humble/share/feetech_ros2_driver/environment/ament_prefix_path.sh
+/opt/ros/humble/share/feetech_ros2_driver/environment/library_path.dsv
+/opt/ros/humble/share/feetech_ros2_driver/environment/library_path.sh
+/opt/ros/humble/share/feetech_ros2_driver/environment/path.dsv
+/opt/ros/humble/share/feetech_ros2_driver/environment/path.sh
+/opt/ros/humble/share/feetech_ros2_driver/feetech_ros2_control_plugin_description.xml
+/opt/ros/humble/share/feetech_ros2_driver/local_setup.bash
+/opt/ros/humble/share/feetech_ros2_driver/local_setup.dsv
+/opt/ros/humble/share/feetech_ros2_driver/local_setup.sh
+/opt/ros/humble/share/feetech_ros2_driver/local_setup.zsh
+/opt/ros/humble/share/feetech_ros2_driver/package.dsv
+/opt/ros/humble/share/feetech_ros2_driver/package.xml
+/usr/share
+/usr/share/doc
+/usr/share/doc/ros-humble-feetech-ros2-driver
+/usr/share/doc/ros-humble-feetech-ros2-driver/changelog.Debian.gz
+/usr/share/doc/ros-humble-feetech-ros2-driver/copyright

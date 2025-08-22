@@ -1,10 +1,12 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!-- Allow overriding hardware plugin (default keeps sim plugin for backward compatibility) -->
+    <xacro:arg name="hardware_plugin" default="ign_ros2_control/IgnitionSystem" />
 
     <ros2_control name="RobotSystem" type="system">
-        <!-- ros2_control Gazebo Fortress -->
+        <!-- ros2_control hardware plugin (sim default; override for real HW) -->
         <hardware>
-            <plugin>ros_ign_control/GazeboSimSystem</plugin>
+            <plugin>$(arg hardware_plugin)</plugin>
         </hardware>
 
         <joint name="1">

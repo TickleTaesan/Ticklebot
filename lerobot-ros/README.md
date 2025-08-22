@@ -68,7 +68,7 @@ cd <YOUR lerobot-ros DIRECTORY>
 python scripts/teleoperate.py \
   --robot.type=so101_ros \
   --robot.id=my_awesome_follower_arm \
-  --teleop.type=keyboard_joint \
+  --teleop.type=gamepad_6dof \
   --teleop.id=my_awesome_leader_arm \
   --display_data=true
 ```
